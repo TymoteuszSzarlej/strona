@@ -1,5 +1,5 @@
 #!/bin/bash
-
+	
 clear
 source .venv/bin/activate
 
@@ -12,5 +12,5 @@ python manage.py migrate
 clear
 
 
-python manage.py runserver
+python manage.py runserver 8001
 
