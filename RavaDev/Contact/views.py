@@ -3,6 +3,7 @@ from .models import Message
 from .forms import MessageForm  # Import nowego formularza
 from _common.logs import AppLogger
 from _common.messages import FlashMessage
+from Services.models import Service
 
 
 
@@ -15,46 +16,42 @@ def contact_success(request):
 
 
 
-def contact(request):
+def contact(request, service_id=None):
     if request.method == 'POST':
         form = MessageForm(request.POST)
-        
+        if service_id:
+            try:
+                service = Service.objects.get(id=service_id)
+                form.instance.service = service
+            except Service.DoesNotExist:
+                AppLogger.warning(
+                    f"Nie znaleziono usługi o ID {service_id} podczas próby powiązania z wiadomością",
+                    "Contact"
+                )
+
         if form.is_valid():
             try:
-                # Zapis wiadomości do bazy
                 message = form.save()
-                
-                # Logowanie sukcesu
                 AppLogger.info(
                     f"Nowa wiadomość od {message.sender} ({message.email})", 
                     "Contact"
                 )
-                
-                # Wiadomość flash o sukcesie
                 FlashMessage.success(request, "Wiadomość została wysłana pomyślnie!")
-                
-                return redirect('/contact/success/')  # Strona potwierdzenia
-                
+                return redirect('Contact:contact_success')
             except Exception as e:
-                # Logowanie błędu przy zapisie
                 AppLogger.error(
                     f"Błąd podczas zapisywania wiadomości od {form.cleaned_data.get('sender', 'Unknown')}",
                     "Contact", 
                     exc_info=e
                 )
                 FlashMessage.error(request, "Wystąpił błąd podczas wysyłania wiadomości. Spróbuj ponownie.")
-        
         else:
-            # Formularz zawiera błędy walidacji
             FlashMessage.form_errors(request, form)
             AppLogger.warning(
                 f"Błąd walidacji formularza - {len(form.errors)} błędów", 
                 "Contact"
             )
-    
     else:
-        # GET request - pusty formularz
         form = MessageForm()
     
     return render(request, 'Contact/contact.html', {'form': form})
-
