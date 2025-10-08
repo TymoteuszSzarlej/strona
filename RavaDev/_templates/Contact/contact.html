@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block appTitle %}Kontakt{% endblock %}
+{% block moduleTitle %}Formularz kontaktowy{% endblock %}
+
+{% block appHeader %}
+Skontaktuj się z nami
+{% endblock %}
+
+{% block moduleHeader %}
+Wypełnij formularz, a odezwiemy się jak najszybciej
+{% endblock %}
+
+{% block content %}
+<div class="contact-form-container">
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="{{ form.sender.id_for_label }}">{{ form.sender.label }}:</label>
+            {{ form.sender }}
+            {% if form.sender.errors %}
+            <div class="error-list">
+                {% for error in form.sender.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.email.id_for_label }}">{{ form.email.label }}:</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+            <div class="error-list">
+                {% for error in form.email.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.phoneCode.id_for_label }}">Kod kierunkowy:</label>
+            {{ form.phoneCode }}
+            {% if form.phoneCode.errors %}
+            <div class="error-list">
+                {% for error in form.phoneCode.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.phoneNumber.id_for_label }}">Numer telefonu:</label>
+            {{ form.phoneNumber }}
+            {% if form.phoneNumber.errors %}
+            <div class="error-list">
+                {% for error in form.phoneNumber.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.content.id_for_label }}">{{ form.content.label }}:</label>
+            {{ form.content }}
+            {% if form.content.errors %}
+            <div class="error-list">
+                {% for error in form.content.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="submit-btn">Wyślij wiadomość</button>
+    </form>
+</div>
+
+
+{% endblock %}

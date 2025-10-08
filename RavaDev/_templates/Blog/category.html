@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block appTitle %}
+Blog
+{% endblock %}
+
+{% block moduleTitle %}
+Posty należące do kategorii
+<strong>
+    {{ category.name }}
+</strong>{% endblock %}
+
+{% block appHeader %}
+Blog
+{% endblock %}
+
+{% block moduleHeader %}
+Posty należące do kategorii
+<strong>
+    {{ category.name }}
+</strong>{% endblock %}
+
+{% block content %}
+    <h2>
+        {{ category.name }}
+    </h2>
+    <p>
+        {{ category.description }}
+    </p>
+    {% for post in posts %}
+        <a href="{% url 'Blog:post' post.id %}">
+        <div>
+            <h4>
+                {{post.title}}
+            </h4>
+            <p>{{post.snippet}}</p>
+        </div>
+        </a>
+    {% endfor %}
+
+{% endblock %}

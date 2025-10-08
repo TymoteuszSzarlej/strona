@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block appTitle %}
+Blog
+{% endblock %}
+
+{% block moduleTitle %}
+Strona główna bloga
+{% endblock %}
+
+{% block appHeader %}
+Blog
+{% endblock %}
+
+{% block moduleHeader %}
+Strona główna bloga
+{% endblock %}
+
+{% block content %}
+    {% for category in categories %}
+    <a href="{% url 'Blog:category' category.id %}">
+    <section class="bg-white shadow-lg rounded-2xl p-6 mb-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">
+            {{ category.name }}
+        </h2>
+        <p class="text-gray-600 mb-4">
+            {{ category.description }}
+        </p>
+        <small class="text-gray-500">
+            Posty: <strong>{{ category.post_set.count }}</strong>
+        </small>
+        {% for post in posts %}
+            {% if post.category == category %}
+            <a href="{% url 'Blog:post' post.id %}">
+            <div>
+                <h4>{{ post.title }}</h4>
+                <p>
+                    {{ post.snippet }}
+                </p>
+            </div>
+            </a>
+            {% endif %}
+        {% endfor %}
+    </section>
+    </a>
+    {% endfor %}
+{% endblock %}

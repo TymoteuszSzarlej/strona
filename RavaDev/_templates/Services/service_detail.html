@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block appTitle %}Usługi - {{ service.title }}{% endblock %}
+{% block moduleTitle %}Szczegóły usługi{% endblock %}
+
+{% block appHeader %}
+Usługi
+{% endblock %}
+
+{% block moduleHeader %}
+{{ service.title }}
+{% endblock %}
+
+{% block content %}
+<div class="service-detail-container">
+    <div class="service-header">
+        <div class="service-meta">
+            <span class="service-number">Usługa #{{ service.nr }}</span>
+        </div>
+        <h1 class="service-title">{{ service.title }}</h1>
+    </div>
+
+    <div class="service-content">
+        <section class="service-description">
+            <h2>Opis usługi</h2>
+            <div class="description-text">
+                {{ service.description|linebreaks }}
+            </div>
+        </section>
+
+        {% if service.feature_1_name or service.feature_2_name %}
+        <section class="service-features">
+            <h2>Cechy usługi</h2>
+            <div class="features-grid">
+                {% if service.feature_1_name %}
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <h3>{{ service.feature_1_name }}</h3>
+                    </div>
+                    <div class="feature-content">
+                        <p>{{ service.feature_1_ranges }}</p>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if service.feature_2_name %}
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <h3>{{ service.feature_2_name }}</h3>
+                    </div>
+                    <div class="feature-content">
+                        <p>{{ service.feature_2_ranges }}</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+        {% endif %}
+    </div>
+
+    <div class="service-actions">
+        <a href="{% url 'services_list' %}" class="btn btn-back">
+            ← Powrót do listy usług
+        </a>
+        <!-- Możesz dodać przycisk kontaktowy lub CTA -->
+        <a href="{% url 'contact' %}" class="btn btn-primary">
+            Zapytaj o tę usługę
+        </a>
+    </div>
+</div>
+{% endblock %}
+<style>.service-detail-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.service-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+.service-meta {
+    margin-bottom: 10px;
+}
+
+.service-number {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.service-title {
+    font-size: 2.5em;
+    margin: 0;
+    font-weight: 700;
+}
+
+.service-content {
+    display: grid;
+    gap: 30px;
+}
+
+.service-description {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 12px;
+    border-left: 4px solid #667eea;
+}
+
+.service-description h2 {
+    color: #2d3748;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+.description-text {
+    font-size: 1.1em;
+    line-height: 1.7;
+    color: #4a5568;
+}
+
+.service-features h2 {
+    color: #2d3748;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.feature-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.feature-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.feature-header h3 {
+    color: #667eea;
+    margin: 0 0 15px 0;
+    font-size: 1.3em;
+    font-weight: 600;
+}
+
+.feature-content p {
+    color: #4a5568;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.service-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-back {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-back:hover {
+    background: #5a6268;
+    transform: translateX(-2px);
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #5a6fd8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+    .service-header {
+        padding: 20px;
+    }
+    
+    .service-title {
+        font-size: 2em;
+    }
+    
+    .service-description,
+    .feature-card {
+        padding: 20px;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .service-actions {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .btn {
+        width: 100%;
+        text-align: center;
+    }
+}</style>
