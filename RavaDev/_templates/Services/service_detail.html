@@ -60,13 +60,11 @@ Usługi
     </div>
 
     <div class="service-actions">
-        <a href="{% url 'services_list' %}" class="btn btn-back">
+        <a href="{% url 'Services:services' %}" class="btn btn-back">
             ← Powrót do listy usług
         </a>
         <!-- Możesz dodać przycisk kontaktowy lub CTA -->
-        <a href="{% url 'contact' %}" class="btn btn-primary">
-            Zapytaj o tę usługę
-        </a>
+        <a href="{% url 'Contact:contact_service' service_id=service.id %}">
     </div>
 </div>
 {% endblock %}

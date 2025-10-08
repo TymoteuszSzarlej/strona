@@ -1,10 +1,10 @@
 from django.urls import path
 from . import views 
-from .views import contact, contact_success
 
-app_name = 'Contact'  # Opcjonalnie, ale zalecane dla namespacingu
+app_name = 'Contact'
 
 urlpatterns = [
-    path('', views.contact, name='contact'),
+    path('', views.contact, name='contact'),  # Główny kontakt
+    path('service/<int:service_id>/', views.contact, name='contact_service'),  # Kontakt z usługą
     path('success/', views.contact_success, name='contact_success'),
 ]

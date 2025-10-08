@@ -17,7 +17,7 @@ Poznaj listę naszych usług
     <ul class="services-list">
         {% for service in services %}
         <li class="service-item">
-            <h3><a href="{% url 'service_detail' service.id %}">{{ service.title }}</a></h3>
+            <h3><a href="{% url 'Services:service_detail' service.id %}">{{ service.title }}</a></h3>
             <p>{{ service.description }}</p>
         </li>
         {% empty %}
