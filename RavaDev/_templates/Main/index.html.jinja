@@ -1,30 +1,30 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block appTitle %}RavaDev - Strona główna{% endblock %}
+{% block appTitle %}Strona główna{% endblock %}
 {% block moduleTitle %}Witamy w RavaDev{% endblock %}
-{% block appHeader %}{% endblock %}
-{% block moduleHeader %}{% endblock %}
+{% block appHeader %}Strona główna{% endblock %}
+{% block moduleHeader %}Witamy w RavaDev{% endblock %}
 
 {% block content %}
 <!-- HERO CTA: duży nagłówek + przycisk primary -->
-<section aria-labelledby="hero-cta-heading" style="padding:48px 20px; text-align:center; background:linear-gradient(180deg,#0f172a,#0b1220); color:#fff;">
-  <div style="max-width:1000px; margin:0 auto;">
-    <h1 id="hero-cta-heading" style="font-size:2.25rem; margin:0 0 12px; line-height:1.05;">
+<section aria-labelledby="hero-cta-heading" style="padding:48px 20px; text-align:center; background:linear-gradient(180deg,turquoise,magenta); color:#000000; box-shadow:0 0px 100px rgba(0,255,255,1); border-radius:50px; margin-bottom:24px;" class="cta-section">
+  <div style="max-width:1000px; margin:0 auto;" class="glass">
+    <h1 id="hero-cta-heading" style="font-size:2.25rem; margin:0 0 12px; line-height:1.05; context-shadow:0 0 8px rgba(0,0,0,0.25);">
       RavaDev — Technologia bliżej ludzi
     </h1>
-    <p style="font-size:1.125rem; margin:0 0 24px; opacity:0.9;">
+    <p style="font-size:1.125rem; margin:0 0 24px; opacity:0.9; color: #333;">
       Profesjonalny outsourcing IT, tworzenie oprogramowania oraz kompleksowe wsparcie technologiczne dla Twojej firmy.
     </p>
     <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
       <a href="/contact" role="button" aria-label="Zamów usługę" style="display:inline-block; padding:14px 22px; background:#06b6d4; color:#042d35; text-decoration:none; border-radius:10px; font-weight:600;">
         Poproś o bezpłatną wycenę
       </a>
-      <a href="/uslugi" role="button" aria-label="Poznaj usługi" style="display:inline-block; padding:14px 22px; background:transparent; color:#e6f7fb; border:2px solid rgba(230,247,251,0.25); text-decoration:none; border-radius:10px; font-weight:600;">
+      <a href="/services" role="button" aria-label="Poznaj usługi" style="display:inline-block; padding:14px 22px; background:transparent; color:#e6f7fb; border:2px solid rgba(230,247,251,0.25); text-decoration:none; border-radius:10px; font-weight:600;">
         Poznaj usługi
       </a>
     </div>
-    <p style="margin-top:18px; font-size:0.95rem; opacity:0.85;">Bezpłatna wycena • Wdrożenia lokalne i chmurowe • Wsparcie 24/7</p>
+    <p style="margin-top:18px; font-size:0.95rem; opacity:0.85; color: #555;">Bezpłatna wycena • Wdrożenia lokalne i chmurowe • Wsparcie 24/7</p>
   </div>
 </section>
 <br>
