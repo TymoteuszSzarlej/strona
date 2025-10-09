@@ -7,43 +7,91 @@
     <title>RavaDev • {% block appTitle %}Aplikacja{% endblock %} • {% block moduleTitle %}Moduł{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .hamburger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 10px;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+        }
+
+        .hamburger-menu span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #fff;
+            margin: 2px 0;
+            transition: 0.3s;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .hamburger-menu {
+                display: flex;
+            }
+
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 0;
+                right: 0;
+                flex-direction: column;
+                background: rgba(0, 0, 0, 0.9);
+                backdrop-filter: blur(10px);
+                padding: 60px 20px 20px;
+                width: 250px;
+                height: 100vh;
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .hamburger-menu.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+
+            .hamburger-menu.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger-menu.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(5px, -5px);
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-        <div class="container">
-            <a href="{% url 'Main:index' %}" class="logo">
-                {% include "_includes/wordmark.html" %}
-                
-            </a>
-            
-            <ul class="nav-links" id="navLinks">
-                <button class="hamburger" id="hamburger">
-                <span><a href="{% url 'Main:index' %}" class="nav-link">Strona Główna</a></span>
-                <span><a href="{% url 'About:about' %}" class="nav-link">O Nas</a></span>
-                <span><a href="{% url 'Blog:blog' %}" class="nav-link">Blog</a></span>
-                <span><a href="{% url 'Services:services' %}" class="nav-link">Usługi</a></span>
-                <span><a href="{% url 'Projects:projects' %}" class="nav-link">Realizacje</a></span>
-                <span><a href="{% url 'Contact:contact' %}" class="nav-link">Kontakt</a></span>
-            </button>
-                <li><a href="{% url 'Main:index' %}" class="nav-link">Strona Główna</a></li>
-                <li><a href="{% url 'About:about' %}" class="nav-link">O Nas</a></li>
-                <li><a href="{% url 'Blog:blog' %}" class="nav-link">Blog</a></li>
-                <li><a href="{% url 'Services:services' %}" class="nav-link">Usługi</a></li>
-                <li><a href="{% url 'Projects:projects' %}" class="nav-link">Realizacje</a></li>
-                <li><a href="{% url 'Contact:contact' %}" class="nav-link">Kontakt</a></li>
-            </ul>
-
-            <button class="hamburger" id="hamburger">
-                <span><a href="{% url 'Main:index' %}" class="nav-link">Strona Główna</a></span>
-                <span><a href="{% url 'About:about' %}" class="nav-link">O Nas</a></span>
-                <span><a href="{% url 'Blog:blog' %}" class="nav-link">Blog</a></span>
-                <span><a href="{% url 'Services:services' %}" class="nav-link">Usługi</a></span>
-                <span><a href="{% url 'Projects:projects' %}" class="nav-link">Realizacje</a></span>
-                <span><a href="{% url 'Contact:contact' %}" class="nav-link">Kontakt</a></span>
-            </button>
+    <header>
+        <!-- Add hamburger menu button -->
+        <div class="hamburger-menu" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
-    </nav>
+
+        <!-- Modify your existing navigation -->
+        <nav class="nav-links" id="navLinks">
+            <a href="{% url 'Main:index' %}">Strona główna</a>
+            <a href="{% url 'Blog:blog' %}">Blog</a>
+            <a href="{% url 'Services:services' %}">Usługi</a>
+            <a href="{% url 'Projects:projects' %}">Realizacje</a>
+            <a href="{% url 'Contact:contact' %}">Kontakt</a>
+        </nav>
+    </header>
 
     <!-- Flash Messages -->
     {% if messages %}
