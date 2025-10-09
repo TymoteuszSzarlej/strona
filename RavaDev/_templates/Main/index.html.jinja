@@ -1,8 +1,100 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
 
+{% block appTitle %}RavaDev - Strona główna{% endblock %}
+{% block moduleTitle %}Witamy w RavaDev{% endblock %}
+{% block appHeader %}RavaDev - Strona główna{% endblock %}
+{% block moduleHeader %}Witamy w RavaDev{% endblock %}
+
 {% block content %}
-<h1>Welcome to RavaDev</h1>
-<p>Your go-to place for web development services.</p>
-<img src="{% static 'images/home_banner.jpg' %}" alt="Home Banner">
+<!-- Sekcja CTA -->
+<section id="cta" class="cta-section">
+  <div class="cta-bg-slider">
+    {% for img in cta_images %}
+      <div class="cta-slide {% if forloop.first %}active{% endif %}">
+        <img src="/_media/{{ img }}" alt="Slide {{ forloop.counter }}">
+      </div>
+    {% endfor %}
+  </div>
+  <div class="cta-content">
+    <h1>Rozwijaj swój biznes z RavaDev!</h1>
+    <p>Profesjonalne usługi web developmentu dla Twojej firmy.</p>
+    <a href="#kontakt" class="cta-btn">Skontaktuj się z nami</a>
+  </div>
+</section>
+
+<!-- Reszta sekcji -->
+<section id="o-nas" class="about-section">
+  <h2>O nas</h2>
+  <p>Jesteśmy zespołem pasjonatów technologii, specjalizujących się w tworzeniu nowoczesnych stron i aplikacji internetowych.</p>
+</section>
+
+<section id="blog" class="blog-section">
+  <h2>Blog</h2>
+  <ul>
+    <li><a href="/blog/jak-zaczac-z-web-developmentem/">Jak zacząć z web developmentem?</a></li>
+    <li><a href="/blog/trendy-w-projektowaniu-stron/">Trendy w projektowaniu stron 2025</a></li>
+    <li><a href="/blog/seo-dla-firm/">SEO dla firm - praktyczne wskazówki</a></li>
+  </ul>
+</section>
+
+<section id="uslugi" class="services-section">
+  <h2>Usługi</h2>
+  <ul>
+    <li>Tworzenie stron internetowych</li>
+    <li>Projektowanie UI/UX</li>
+    <li>Optymalizacja SEO</li>
+    <li>Wsparcie techniczne</li>
+  </ul>
+</section>
+
+<section id="realizacje" class="portfolio-section">
+  <h2>Realizacje</h2>
+  <div class="portfolio-gallery">
+    <img src="{% static 'images/realizacja1.jpg' %}" alt="Realizacja 1">
+    <img src="{% static 'images/realizacja2.jpg' %}" alt="Realizacja 2">
+    <img src="{% static 'images/realizacja3.jpg' %}" alt="Realizacja 3">
+  </div>
+</section>
+
+<section id="kontakt" class="contact-section">
+  <h2>Kontakt</h2>
+  <form method="post" action="/kontakt/">
+    {% csrf_token %}
+    <label for="name">Imię:</label>
+    <input type="text" id="name" name="name" required>
+    <label for="email">E-mail:</label>
+    <input type="email" id="email" name="email" required>
+    <label for="message">Wiadomość:</label>
+    <textarea id="message" name="message" required></textarea>
+    <button type="submit">Wyślij</button>
+  </form>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+window.onload = function() {
+    const slides = document.querySelectorAll('.cta-slide');
+    let currentSlide = 0;
+
+    function showSlide(index) {
+        slides.forEach(slide => {
+            slide.classList.remove('active');
+            slide.style.display = 'none';
+        });
+
+        slides[index].classList.add('active');
+        slides[index].style.display = 'block';
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    showSlide(currentSlide);
+    setInterval(nextSlide, 2000); // co 2 sekundy
+};
+</script>
 {% endblock %}
