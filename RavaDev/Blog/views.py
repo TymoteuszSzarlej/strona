@@ -5,6 +5,7 @@ from .models import Post, Category, Review
 def blog(request):
     categories = Category.objects.all()
     posts = Post.objects.all().order_by('-published_date')
+    print(categories)
     return render(request, 'Blog/blog.html', {'categories': categories, 'posts': posts})
 
 def category(request, category_id):

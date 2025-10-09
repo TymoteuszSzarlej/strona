@@ -13,18 +13,43 @@ Poznaj listę naszych usług
 {% endblock %}
 
 {% block content %}
-<div class="services-list-container">
-    <ul class="services-list">
-        {% for service in services %}
-        <li class="service-item">
-            <h3><a href="{% url 'Services:service_detail' service.id %}">{{ service.title }}</a></h3>
-            <p>{{ service.description }}</p>
-        </li>
-        {% empty %}
-        <li>Brak dostępnych usług.</li>
-        {% endfor %}
-    </ul>
 
+{% for field in fields %}
+<div class="container glass widget-container" style="margin-bottom: 2rem;">
+    <h2>{{ field.name }}</h2>
+{% for service in services %}{% if service.field == field %}
+    <!-- Karta usługi -->
+    <a href="{% url 'Services:service_detail' service.id %}">
+        <div class="container glass widget-container">
+            
+            <!-- Górna część: dane elementu -->
+            <h4>{{ service.name }}</h4>
+
+            <!-- Dolna część: podział zawartości -->
+            <div class="content-split" style="display: flex; justify-content: space-between; width: 80%;">
+                
+                <!-- Lewa kolumna: zdjęcie -->
+                <div class="image-container" style="width: 100%;">
+                    <img src="{{ service.icon.url }}" 
+                         alt="Ikona {{ service.name }}" 
+                         style="max-width: 100%; height: auto; border-radius: 4px;" class="mini">
+                </div>
+
+                <!-- Prawa kolumna: informacje -->
+                <div class="container" style="width: 100%;">
+                    <h6>{{ service.field.name }}</h6>
+                    <br>
+                    <p>Cena: <strong>{{ service.price }}</strong></p>
+                    <p>Czas realizacji: <strong>{{ service.duration }}</strong></p>
+                    <p>{{ service.description|truncatechars:256 }}</p>
+                </div>
+                
+            </div>
+        </div>
+    </a>
+{% endif %}{% endfor %}
+</div>
+{% endfor %}
 
 {% endblock %}
 <style>.service-detail-container {

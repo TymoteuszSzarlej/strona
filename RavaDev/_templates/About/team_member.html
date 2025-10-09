@@ -5,7 +5,7 @@ O nas
 {% endblock %}
 
 {% block moduleTitle %}
-Informacje na temat członka zespołu {{ members.0.name }}
+Informacje na temat członka zespołu {{ member.0.name }}
 {% endblock %}
 
 {% block appHeader %}
@@ -13,23 +13,28 @@ O nas
 {% endblock %}
 
 {% block moduleHeader %}
-Informacje na temat członka zespołu <strong>{{ members.0.name }}</strong>.
+Informacje na temat członka zespołu <strong>{{ member.0.name }}</strong>.
 {% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-6 py-8">
   <div class="bg-white shadow-lg rounded-2xl p-6 mb-8">
-    <h2 class="text-2xl font-bold mb-4">{{ members.0.name }}</h2>
+    <h2 class="text-2xl font-bold mb-4">{{ member.0.name }}</h2>
     <p class="text-gray-700 leading-relaxed mb-4">
-      <strong>Rola:</strong> {{ members.0.role }}
+      <h4>Rola:</h4> {{ member.0.role }}
+      <strong>Wykształcenie:</strong> {{ member.0.education }}
+      <strong>Stopień:</strong> {{ member.0.degree }}
     </p>
     <p class="text-gray-700 leading-relaxed mb-4">
-      {{ members.0.bio }}
+      {{ member.0.bio }}
     </p>
     <p class="text-gray-700 leading-relaxed">
-      <strong>Kontakt:</strong> <a href="mailto:{{ members.0.email }}" class="text-blue-500 hover:underline">{{ members.0.email }}</a>
+      <strong>E-mail:</strong> <a href="mailto:{{ member.0.email }}" class="text-blue-500 hover:underline">{{ member.0.email }}</a>
+    </p>
+    <p class="text-gray-700 leading-relaxed">
+      <strong>Telefon:</strong> <a href="tel:{{ member.0.phone }}" class="text-blue-500 hover:underline">{{ member.0.phone }}</a>
     </p>
   </div>
-  <img src="{{ members.0.photo.url }}" alt="Zdjęcie {{ members.0.name }}" class="w-48 h-48 object-cover rounded-full mx-auto">
+  <img src="{{ member.0.photo.url }}" alt="Zdjęcie {{ member.0.name }}" class="w-48 h-48 object-cover rounded-full mx-auto">
 
 {% endblock %}

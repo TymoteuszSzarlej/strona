@@ -14,16 +14,6 @@ Wypełnij formularz, a odezwiemy się jak najszybciej
 
 {% block content %}
 <div class="contact-form-container">
-    {% if messages %}
-    <div class="messages-container">
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">
-            {{ message }}
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-
     <form method="post" novalidate>
         {% csrf_token %}
         

@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 def services(request):
     fields_list = Field.objects.all()
     service_list = Service.objects.all()
-    return render(request, 'Services/services.html', {'services': service_list})
+    return render(request, 'Services/services.html', {'services': service_list, 'fields': fields_list})
 
 def service_detail(request, service_id):
     # Pobierz obiekt usługi zamiast tylko ID

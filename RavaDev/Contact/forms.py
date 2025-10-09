@@ -44,8 +44,8 @@ class MessageForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Dynamiczne ustawienie choices dla phoneCode
         self.fields['phoneCode'].choices = self.get_country_codes()
+        self.fields['phoneCode'].initial = '48'  # domyślny kod kierunkowy Polska
     
     @staticmethod
     def get_country_codes():

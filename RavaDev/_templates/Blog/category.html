@@ -28,14 +28,42 @@ Posty należące do kategorii
         {{ category.description }}
     </p>
     {% for post in posts %}
-        <a href="{% url 'Blog:post' post.id %}">
-        <div>
-            <h4>
-                {{post.title}}
-            </h4>
-            <p>{{post.snippet}}</p>
+    <!-- Karta posta bloga -->
+    <a href="{% url 'Blog:post' post.id %}">
+        <div class="container glass widget-container">
+            
+            <!-- Górna część: dane elementu -->
+            <h4>{{ post.title }}</h4>
+
+            <!-- Dolna część: podział zawartości -->
+            <div class="content-split" style="display: flex; justify-content: space-between; width: 80%;">
+                
+                <!-- Lewa kolumna: zdjęcie -->
+                <div class="image-container" style="width: 100%;">
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" 
+                         alt="Zdjęcie {{ post.title }}" 
+                         style="max-width: 100%; height: auto; border-radius: 4px;" class="mini">
+                {% else %}
+                    <img src=""
+                         alt="Brak zdjęcia"
+                         style="max-width: 100%; height: auto; border-radius: 4px;" class="mini">
+                {% endif %}
+                </div>
+
+                <!-- Prawa kolumna: informacje -->
+                <div class="container" style="width: 100%;">
+                    <h6>{{ post.author }}</h6>
+                    <br>
+                    <p>Kategoria: <strong>{{ post.category.name }}</strong></p>
+                    <p>Data publikacji: <strong>{{ post.created_at|date:"d.m.Y" }}</strong></p>
+                    <p>{{ post.content|safe|truncatewords:64 }}</p>
+                    <a href="{% url 'Blog:post' post.id %}">Czytaj więcej</a>
+                </div>
+                
+            </div>
         </div>
-        </a>
-    {% endfor %}
+    </a>
+{% endfor %}
 
 {% endblock %}

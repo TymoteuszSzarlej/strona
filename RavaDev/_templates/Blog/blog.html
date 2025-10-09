@@ -18,30 +18,25 @@ Strona główna bloga
 
 {% block content %}
     {% for category in categories %}
+    <!-- Karta kategorii -->
     <a href="{% url 'Blog:category' category.id %}">
-    <section class="bg-white shadow-lg rounded-2xl p-6 mb-6">
-        <h2 class="text-2xl font-bold text-gray-800 mb-2">
-            {{ category.name }}
-        </h2>
-        <p class="text-gray-600 mb-4">
-            {{ category.description }}
-        </p>
-        <small class="text-gray-500">
-            Posty: <strong>{{ category.post_set.count }}</strong>
-        </small>
-        {% for post in posts %}
-            {% if post.category == category %}
-            <a href="{% url 'Blog:post' post.id %}">
-            <div>
-                <h4>{{ post.title }}</h4>
-                <p>
-                    {{ post.snippet }}
-                </p>
-            </div>
-            </a>
-            {% endif %}
-        {% endfor %}
-    </section>
+        <div class="container glass widget-container" style="margin-bottom: 2rem;">
+            <!-- Górna część: dane elementu -->
+            <h4>{{ category.name }}</h4>
+            <!-- Dolna część: podział zawartości -->
+            
+                <!-- Lewa kolumna: kategoria -->
+                <div class="container" style="width: 100%;">
+                    <h6>Kategoria bloga</h6>
+                    <br>
+                    <p>Liczba postów: <strong>{{ category.post_set.count }}</strong></p>
+                    <p>Opis: <strong>{{ category.description }}</strong></p>
+                    <p>{{ category.description|truncatechars:256 }}</p>
+                </div>
+               
+
+        </div>
     </a>
+    {{categories}}
     {% endfor %}
 {% endblock %}

@@ -58,18 +58,20 @@
     {% endif %}
 
     <!-- Main Content -->
+    
     <main>
         <div class="container">
             <div class="main-content glass">
                 <header class="content-header text-center">
-                    <h1 class="text-gradient">{% block appHeader %}Aplikacja{% endblock %}</h1>
-                    <p class="lead">{% block moduleHeader %}Moduł aplikacji{% endblock %}</p>
+                    <h1 class="text-gradient">{% block appHeader %}{% endblock %}</h1>
+                    <p class="lead">{% block moduleHeader %}{% endblock %}</p>
                 </header>
                 
                 <div class="content-body">
                     {% block content %}
                     <!-- Content goes here -->
                     {% endblock %}
+
                 </div>
             </div>
         </div>

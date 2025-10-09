@@ -3,11 +3,32 @@
 
 {% block appTitle %}RavaDev - Strona główna{% endblock %}
 {% block moduleTitle %}Witamy w RavaDev{% endblock %}
-{% block appHeader %}RavaDev - Strona główna{% endblock %}
-{% block moduleHeader %}Witamy w RavaDev{% endblock %}
+{% block appHeader %}{% endblock %}
+{% block moduleHeader %}{% endblock %}
 
 {% block content %}
-<!-- Sekcja CTA -->
+<!-- HERO CTA: duży nagłówek + przycisk primary -->
+<section aria-labelledby="hero-cta-heading" style="padding:48px 20px; text-align:center; background:linear-gradient(180deg,#0f172a,#0b1220); color:#fff;">
+  <div style="max-width:1000px; margin:0 auto;">
+    <h1 id="hero-cta-heading" style="font-size:2.25rem; margin:0 0 12px; line-height:1.05;">
+      RavaDev — Technologia bliżej ludzi
+    </h1>
+    <p style="font-size:1.125rem; margin:0 0 24px; opacity:0.9;">
+      Profesjonalny outsourcing IT, tworzenie oprogramowania oraz kompleksowe wsparcie technologiczne dla Twojej firmy.
+    </p>
+    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+      <a href="/contact" role="button" aria-label="Zamów usługę" style="display:inline-block; padding:14px 22px; background:#06b6d4; color:#042d35; text-decoration:none; border-radius:10px; font-weight:600;">
+        Poproś o bezpłatną wycenę
+      </a>
+      <a href="/uslugi" role="button" aria-label="Poznaj usługi" style="display:inline-block; padding:14px 22px; background:transparent; color:#e6f7fb; border:2px solid rgba(230,247,251,0.25); text-decoration:none; border-radius:10px; font-weight:600;">
+        Poznaj usługi
+      </a>
+    </div>
+    <p style="margin-top:18px; font-size:0.95rem; opacity:0.85;">Bezpłatna wycena • Wdrożenia lokalne i chmurowe • Wsparcie 24/7</p>
+  </div>
+</section>
+<br>
+<!-- CTA Slider -->
 <section id="cta" class="cta-section">
   <div class="cta-slider">
     {% for img in cta_images %}
@@ -30,49 +51,189 @@
 <!-- Reszta sekcji -->
 <section id="o-nas" class="about-section">
   <h2>O nas</h2>
-  <p>Jesteśmy zespołem pasjonatów technologii, specjalizujących się w tworzeniu nowoczesnych stron i aplikacji internetowych.</p>
+  <p>RavaDev to młoda, innowacyjna firma technologiczna z siedzibą w Harkabuzie (gmina Raba Wyżna). Specjalizujemy się w tworzeniu nowoczesnych aplikacji wspierających codzienne życie i biznes. Naszą misją jest dostarczanie prostych, intuicyjnych i bezpiecznych rozwiązań cyfrowych, które ułatwiają zarządzanie finansami, czasem, zdrowiem oraz procesami biznesowymi.</p>
 </section>
 
 <section id="blog" class="blog-section">
   <h2>Blog</h2>
-  <ul>
-    <li><a href="/blog/jak-zaczac-z-web-developmentem/">Jak zacząć z web developmentem?</a></li>
-    <li><a href="/blog/trendy-w-projektowaniu-stron/">Trendy w projektowaniu stron 2025</a></li>
-    <li><a href="/blog/seo-dla-firm/">SEO dla firm - praktyczne wskazówki</a></li>
-  </ul>
+  
+  
+
+    {% for category in categories %}
+    <!-- Karta kategorii -->
+    <a href="{% url 'Blog:category' category.id %}">
+        <div class="container glass widget-container" style="margin-bottom: 2rem;">
+            <!-- Górna część: dane elementu -->
+            <h4>{{ category.name }}</h4>
+            <!-- Dolna część: podział zawartości -->
+            
+                <!-- Lewa kolumna: kategoria -->
+                <div class="container" style="width: 100%;">
+                    <h6>Kategoria bloga</h6>
+                    <br>
+                    <p>Liczba postów: <strong>{{ category.post_set.count }}</strong></p>
+                    <p>Opis: <strong>{{ category.description }}</strong></p>
+                    <p>{{ category.description|truncatechars:256 }}</p>
+                </div>
+               
+
+        </div>
+    </a>
+    {% endfor %}
+
+
 </section>
 
 <section id="uslugi" class="services-section">
   <h2>Usługi</h2>
-  <ul>
-    <li>Tworzenie stron internetowych</li>
-    <li>Projektowanie UI/UX</li>
-    <li>Optymalizacja SEO</li>
-    <li>Wsparcie techniczne</li>
-  </ul>
+
+{% for field in fields %}
+<div class="container glass widget-container" style="margin-bottom: 2rem;">
+    <h2>{{ field.name }}</h2>
+{% for service in services %}{% if service.field == field %}
+    <!-- Karta usługi -->
+    <a href="{% url 'Services:service_detail' service.id %}">
+        <div class="container glass widget-container">
+            
+            <!-- Górna część: dane elementu -->
+            <h4>{{ service.name }}</h4>
+
+            <!-- Dolna część: podział zawartości -->
+            <div class="content-split" style="display: flex; justify-content: space-between; width: 80%;">
+                
+                <!-- Lewa kolumna: zdjęcie -->
+                <div class="image-container" style="width: 100%;">
+                    <img src="{{ service.icon.url }}" 
+                         alt="Ikona {{ service.name }}" 
+                         style="max-width: 100%; height: auto; border-radius: 4px;" class="mini">
+                </div>
+
+                <!-- Prawa kolumna: informacje -->
+                <div class="container" style="width: 100%;">
+                    <h6>{{ service.field.name }}</h6>
+                    <br>
+                    <p>Cena: <strong>{{ service.price }}</strong></p>
+                    <p>Czas realizacji: <strong>{{ service.duration }}</strong></p>
+                    <p>{{ service.description|truncatechars:256 }}</p>
+                </div>
+                
+            </div>
+        </div>
+    </a>
+{% endif %}{% endfor %}
+</div>
+{% endfor %}
+
 </section>
 
 <section id="realizacje" class="portfolio-section">
   <h2>Realizacje</h2>
-  <div class="portfolio-gallery">
-    <img src="{% static 'images/realizacja1.jpg' %}" alt="Realizacja 1">
-    <img src="{% static 'images/realizacja2.jpg' %}" alt="Realizacja 2">
-    <img src="{% static 'images/realizacja3.jpg' %}" alt="Realizacja 3">
-  </div>
+{% for project in projects %}
+    <!-- Karta projektu -->
+    <a href="{% url 'Projects:project_detail' project.id %}">
+        <div class="container glass widget-container">
+            
+            <!-- Górna część: dane elementu -->
+            <h4>{{ project.title }}</h4>
+
+            <!-- Dolna część: podział zawartości -->
+            <div class="content-split" style="display: flex; justify-content: space-between; width: 80%;">
+                
+                <!-- Lewa kolumna: zdjęcie -->
+                <div class="image-container" style="width: 100%;">
+                    <img src="{{ project.main_image.url }}" 
+                         alt="Zdjęcie {{ project.title }}" 
+                         style="max-width: 100%; height: auto; border-radius: 4px;" class="mini">
+                </div>
+
+                <!-- Prawa kolumna: informacje -->
+                <div class="container" style="width: 100%;">
+                    <h6>{{ project.client }}</h6>
+                    <br>
+                    <p>Kategoria: <strong>{{ project.category }}</strong></p>
+                    <p>Data realizacji: <strong>{{ project.completion_date|date:"d.m.Y" }}</strong></p>
+                    <p>{{ project.description|truncatechars:256 }}</p>
+                    <a href="{% url 'Projects:project_detail' project.id %}">Zobacz projekt</a>
+                </div>
+                
+            </div>
+        </div>
+    </a>
+{% endfor %}
 </section>
 
 <section id="kontakt" class="contact-section">
   <h2>Kontakt</h2>
-  <form method="post" action="/kontakt/">
-    {% csrf_token %}
-    <label for="name">Imię:</label>
-    <input type="text" id="name" name="name" required>
-    <label for="email">E-mail:</label>
-    <input type="email" id="email" name="email" required>
-    <label for="message">Wiadomość:</label>
-    <textarea id="message" name="message" required></textarea>
-    <button type="submit">Wyślij</button>
-  </form>
+  
+<div class="contact-form-container">
+    <form method="post" novalidate>
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="{{ form.sender.id_for_label }}">{{ form.sender.label }}:</label>
+            {{ form.sender }}
+            {% if form.sender.errors %}
+            <div class="error-list">
+                {% for error in form.sender.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.email.id_for_label }}">{{ form.email.label }}:</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+            <div class="error-list">
+                {% for error in form.email.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.phoneCode.id_for_label }}">Kod kierunkowy:</label>
+            {{ form.phoneCode }}
+            {% if form.phoneCode.errors %}
+            <div class="error-list">
+                {% for error in form.phoneCode.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.phoneNumber.id_for_label }}">Numer telefonu:</label>
+            {{ form.phoneNumber }}
+            {% if form.phoneNumber.errors %}
+            <div class="error-list">
+                {% for error in form.phoneNumber.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.content.id_for_label }}">{{ form.content.label }}:</label>
+            {{ form.content }}
+            {% if form.content.errors %}
+            <div class="error-list">
+                {% for error in form.content.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="submit-btn">Wyślij wiadomość</button>
+    </form>
+</div>
+
+
 </section>
 {% endblock %}
 
