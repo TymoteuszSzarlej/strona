@@ -1,6 +1,6 @@
 import os
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from Blog.models import Category
 from Services.models import Service, Field
 from Projects.models import Project
@@ -9,6 +9,10 @@ from Contact.forms import MessageForm
 # Create your views here.
 def index(request):
     form = MessageForm()
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        request.session['form_data'] = request.POST
+        return redirect('Contact:contact')
     media_root = os.path.join(settings.BASE_DIR, '_media')
     image_extensions = ('.jpg', '.jpeg', '.png', '.gif', '.webp')
     image_paths = []

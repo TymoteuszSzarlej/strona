@@ -9,7 +9,6 @@ from Services.models import Service
 
 
 def contact_success(request):
-    FlashMessage.info(request, 'Przesłano wiadomość. Odezwiemy sie w ciągu kilku dni!')
     """Widok strony potwierdzenia po wysłaniu wiadomości"""
     
     return render(request, 'Contact/success.html')
@@ -17,8 +16,14 @@ def contact_success(request):
 
 
 def contact(request, service_id=None):
-    if request.method == 'POST':
-        form = MessageForm(request.POST)
+    isDataSent = False
+
+    # Obsługa przesłania formularza z sesji
+    if request.method == 'POST' or request.session.get('form_data'):
+        isDataSent = True
+        # Pobierz dane z POST lub z sesji
+        form_data = request.POST if request.method == 'POST' else request.session.pop('form_data')
+        form = MessageForm(form_data)
         if service_id:
             try:
                 service = Service.objects.get(id=service_id)
@@ -28,7 +33,6 @@ def contact(request, service_id=None):
                     f"Nie znaleziono usługi o ID {service_id} podczas próby powiązania z wiadomością",
                     "Contact"
                 )
-
         if form.is_valid():
             try:
                 message = form.save()
