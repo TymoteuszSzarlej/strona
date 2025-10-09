@@ -1,9 +1,6 @@
 {% extends 'base.html' %}
 
-{% block appTitle %}
-Blog
-{% endblock %}
-
+{% block appTitle %}Blog{% endblock %}
 {% block moduleTitle %}
 Post
 <strong>
@@ -11,9 +8,7 @@ Post
 </strong>
 {% endblock %}
 
-{% block appHeader %}
-Blog
-{% endblock %}
+{% block appHeader %}Blog{% endblock %}
 
 {% block moduleHeader %}
 Post
@@ -23,241 +18,139 @@ Post
 {% endblock %}
 
 {% block content %}
-
-
-
 <!-- Karta posta bloga -->
-    <section>
-        <div class="container glass widget-container">
-            
-            <!-- Górna część: dane elementu -->
-<h2>
-        {{post.title}}
-    </h2>
+<section>
+    <div class="container glass widget-container">
+        <!-- Górna część: dane elementu -->
+        <h2>{{post.title}}</h2>
 
-            <!-- Dolna część: podział zawartości -->
-            <div class="content-split" style="display: flex; justify-content: space-between; width: 80%;">
-                
-                <!-- Lewa kolumna: zdjęcie -->
-                <div class="image-container" style="width: 100%;">
+        <!-- Dolna część: podział zawartości -->
+        <div class="content-split" style="display: flex; justify-content: space-between; width: 80%;">
+            <!-- Lewa kolumna: zdjęcie -->
+            <div class="image-container" style="width: 100%;">
                 {% if post.image %}
-                    {% if post.image %}
-    <section class="post image">
-        <div>
-            <img src="{{post.image.url}}" alt="{{post.title}}">
-        </div>
-    </section>
-    {% endif %}
-                </div>
-
-                <!-- Prawa kolumna: informacje -->
-                <section class="post info">
-        <div>
-            <h4>Kategoria</h4>
-            <p>{{post.category}}</p>
-        </div>
-        <div>
-            <h4>Data publikacji</h4>
-            <p>{{post.published_date}}</p>
-        </div>
-        <div>
-            <h4>Autor</h4>
-            <p>{{post.author}}</p>
-        </div>
-        <div>
-            <h4>Wyświetlenia</h4>
-            <p>{{post.views}}</p>
-        </div>
-        <div>
-            <h4>Opinie</h4>
-            {% for review in reviews %}
-                <div class="review">
-                    <h6>{{review.reviewer_name}}</h6>
-                    <div class="review-stars">
-                        {% for i in "12345" %}
-                            {% if forloop.counter <= review.rating %}
-                                <strong class="star-filled">★</strong>
-                            {% else %}
-                                <span class="star-empty">★</span>
-                            {% endif %}
-                        {% endfor %}
+                <section class="post image">
+                    <div>
+                        <img src="{{post.image.url}}" alt="{{post.title}}">
                     </div>
-                    <p>{{ review.comment }}</p>
-                    <small>{{ review.created_date }}</small>
-                </div>
-                <hr>
-            {% empty %}
-                <p>Brak opinii dla tego posta.</p>
-            {% endfor %}
-        </div>
-        <div>
-            <h4>Dodaj opinię</h4>
-            <form method="post">
-                {% csrf_token %}
-                <input type="hidden" name="post_id" value="{{ post.id }}">
-                <div>
-                    <label for="reviewer_name">Imię:</label>
-                    <input type="text" id="reviewer_name" name="reviewer_name" required>
-                </div>
-                
-                <div>
-                    <label>Ocena:</label>
-                    <div class="star-rating">
-                        {% for i in "54321" %}
-                            <input type="radio" id="star{{i}}" name="rating" value="{{i}}">
-                            <label for="star{{i}}">★</label>
-                        {% endfor %}
-                    </div>
-                </div>
-                
-                <div>
-                    <label for="comment">Komentarz:</label>
-                    <textarea id="comment" name="comment" rows="4" required></textarea>
-                </div>
-                
-                <button type="submit">Wyślij opinię</button>
-            </form>
-        </div>
-    </section>
-    <section class="post content">
-        <div>
-            <p>
-                {{post.content|safe}}
-            </p>
-        </div>
-    </section>
-                
+                </section>
+                {% endif %}
             </div>
-        </div>
-    </section>
 
-
-
-
-    <h2>
-        {{post.title}}
-    </h2>
-    <section class="post content">
-        <div>
-            <p>
-                {{post.content|safe}}
-            </p>
-        </div>
-    </section>
-    
-    {% if post.image %}
-    <section class="post image">
-        <div>
-            <img src="{{post.image.url}}" alt="{{post.title}}">
-        </div>
-    </section>
-    {% endif %}
-    
-    <section class="post info">
-        <div>
-            <h4>Kategoria</h4>
-            <p>{{post.category}}</p>
-        </div>
-        <div>
-            <h4>Data publikacji</h4>
-            <p>{{post.published_date}}</p>
-        </div>
-        <div>
-            <h4>Autor</h4>
-            <p>{{post.author}}</p>
-        </div>
-        <div>
-            <h4>Wyświetlenia</h4>
-            <p>{{post.views}}</p>
-        </div>
-        <div>
-            <h4>Opinie</h4>
-            {% for review in reviews %}
-                <div class="review">
-                    <h6>{{review.reviewer_name}}</h6>
-                    <div class="review-stars">
-                        {% for i in "12345" %}
+            <!-- Prawa kolumna: informacje -->
+            <section class="post info">
+                <div>
+                    <h4>Kategoria</h4>
+                    <p>{{post.category}}</p>
+                </div>
+                <div>
+                    <h4>Data publikacji</h4>
+                    <p>{{post.published_date}}</p>
+                </div>
+                <div>
+                    <h4>Autor</h4>
+                    <p>{{post.author}}</p>
+                </div>
+                <div>
+                    <h4>Wyświetlenia</h4>
+                    <p>{{post.views}}</p>
+                </div>
+                <div>
+                    <h4>Opinie</h4>
+                    {% for review in reviews %}
+                    <div class="review">
+                        <h6>{{review.reviewer_name}}</h6>
+                        <div class="review-stars">
+                            {% for i in "12345" %}
                             {% if forloop.counter <= review.rating %}
-                                <strong class="star-filled">★</strong>
+                            <strong class="star-filled">★</strong>
                             {% else %}
-                                <span class="star-empty">★</span>
+                            <span class="star-empty">★</span>
                             {% endif %}
-                        {% endfor %}
+                            {% endfor %}
+                        </div>
+                        <p>{{ review.comment }}</p>
+                        <small>{{ review.created_date }}</small>
                     </div>
-                    <p>{{ review.comment }}</p>
-                    <small>{{ review.created_date }}</small>
+                    <hr>
+                    {% empty %}
+                    <p>Brak opinii dla tego posta.</p>
+                    {% endfor %}
                 </div>
-                <hr>
-            {% empty %}
-                <p>Brak opinii dla tego posta.</p>
-            {% endfor %}
+                <div>
+                    <h4>Dodaj opinię</h4>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="post_id" value="{{ post.id }}">
+                        <div>
+                            <label for="reviewer_name">Imię:</label>
+                            <input type="text" id="reviewer_name" name="reviewer_name" required>
+                        </div>
+                        
+                        <div>
+                            <label>Ocena:</label>
+                            <div class="star-rating">
+                                {% for i in "54321" %}
+                                <input type="radio" id="star{{i}}" name="rating" value="{{i}}">
+                                <label for="star{{i}}">★</label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label for="comment">Komentarz:</label>
+                            <textarea id="comment" name="comment" rows="4" required></textarea>
+                        </div>
+                        
+                        <button type="submit">Wyślij opinię</button>
+                    </form>
+                </div>
+            </section>
         </div>
-        <div>
-            <h4>Dodaj opinię</h4>
-            <form method="post">
-                {% csrf_token %}
-                <input type="hidden" name="post_id" value="{{ post.id }}">
-                <div>
-                    <label for="reviewer_name">Imię:</label>
-                    <input type="text" id="reviewer_name" name="reviewer_name" required>
-                </div>
-                
-                <div>
-                    <label>Ocena:</label>
-                    <div class="star-rating">
-                        {% for i in "54321" %}
-                            <input type="radio" id="star{{i}}" name="rating" value="{{i}}">
-                            <label for="star{{i}}">★</label>
-                        {% endfor %}
-                    </div>
-                </div>
-                
-                <div>
-                    <label for="comment">Komentarz:</label>
-                    <textarea id="comment" name="comment" rows="4" required></textarea>
-                </div>
-                
-                <button type="submit">Wyślij opinię</button>
-            </form>
-        </div>
-    </section>
 
-    <style>
-        .star-rating {
-            display: flex;
-            flex-direction: row-reverse;
-            justify-content: flex-end;
-            font-size: 2em;
-        }
-        .star-rating input {
-            display: none;
-        }
-        .star-rating label {
-            color: #ddd;
-            cursor: pointer;
-            padding: 0 2px;
-        }
-        .star-rating input:checked ~ label {
-            color: gold;
-        }
-        .star-rating label:hover,
-        .star-rating label:hover ~ label {
-            color: gold;
-        }
-        
-        .review-stars {
-            font-size: 1.2em;
-            margin: 5px 0;
-        }
-        .star-filled {
-            color: gold;
-        }
-        .star-empty {
-            color: #ddd;
-        }
-        .review {
-            margin-bottom: 15px;
-        }
-    </style>
+        <section class="post content">
+            <div>
+                <p>{{post.content|safe}}</p>
+            </div>
+        </section>
+    </div>
+</section>
 
+<style>
+    .star-rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        font-size: 2em;
+    }
+    .star-rating input {
+        display: none;
+    }
+    .star-rating label {
+        color: #ddd;
+        cursor: pointer;
+        padding: 0 2px;
+    }
+    .star-rating input:checked ~ label {
+        color: gold;
+    }
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: gold;
+    }
+    
+    .review-stars {
+        font-size: 1.2em;
+        margin: 5px 0;
+    }
+    .star-filled {
+        color: gold;
+    }
+    .star-empty {
+        color: #ddd;
+    }
+    .review {
+        margin-bottom: 15px;
+    }
+</style>
 {% endblock %}

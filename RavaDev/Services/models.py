@@ -111,6 +111,8 @@ class Service(models.Model):
     
     field = models.ForeignKey('Field', on_delete=models.CASCADE, verbose_name="Dziedzina", null=True, blank=True)
     
+    
+
     def __str__(self):
         return f"{self.id}. {self.title}"
     
