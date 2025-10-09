@@ -9,17 +9,21 @@
 {% block content %}
 <!-- Sekcja CTA -->
 <section id="cta" class="cta-section">
-  <div class="cta-bg-slider">
+  <div class="cta-slider">
     {% for img in cta_images %}
       <div class="cta-slide {% if forloop.first %}active{% endif %}">
-        <img src="/_media/{{ img }}" alt="Slide {{ forloop.counter }}">
+        <img src="_media/{{ img }}" alt="Slajd {{ forloop.counter }}">
       </div>
     {% endfor %}
-  </div>
-  <div class="cta-content">
-    <h1>Rozwijaj swój biznes z RavaDev!</h1>
-    <p>Profesjonalne usługi web developmentu dla Twojej firmy.</p>
-    <a href="#kontakt" class="cta-btn">Skontaktuj się z nami</a>
+    <!-- Strzałki -->
+    <button class="cta-prev">&#10094;</button>
+    <button class="cta-next">&#10095;</button>
+    <!-- Kropki -->
+    <div class="cta-dots">
+      {% for img in cta_images %}
+        <span class="cta-dot {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}"></span>
+      {% endfor %}
+    </div>
   </div>
 </section>
 
@@ -73,28 +77,61 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
-window.onload = function() {
-    const slides = document.querySelectorAll('.cta-slide');
-    let currentSlide = 0;
+<script>document.addEventListener("DOMContentLoaded", function() {
+  const slides = document.querySelectorAll(".cta-slide");
+  const dots = document.querySelectorAll(".cta-dot");
+  let currentIndex = 0;
+  let timer;
 
-    function showSlide(index) {
-        slides.forEach(slide => {
-            slide.classList.remove('active');
-            slide.style.display = 'none';
-        });
+  function showSlide(index) {
+    slides.forEach((s, i) => {
+      s.classList.remove("active");
+      dots[i].classList.remove("active");
+    });
+    slides[index].classList.add("active");
+    dots[index].classList.add("active");
+    currentIndex = index;
+  }
 
-        slides[index].classList.add('active');
-        slides[index].style.display = 'block';
-    }
+  function nextSlide() {
+    let newIndex = (currentIndex + 1) % slides.length;
+    showSlide(newIndex);
+  }
 
-    function nextSlide() {
-        currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
-    }
+  function prevSlide() {
+    let newIndex = (currentIndex - 1 + slides.length) % slides.length;
+    showSlide(newIndex);
+  }
 
-    showSlide(currentSlide);
-    setInterval(nextSlide, 2000); // co 2 sekundy
-};
-</script>
+  function startAutoSlide() {
+    timer = setInterval(nextSlide, 4000);
+  }
+
+  function stopAutoSlide() {
+    clearInterval(timer);
+  }
+
+  document.querySelector(".cta-next").addEventListener("click", () => {
+    stopAutoSlide();
+    nextSlide();
+    startAutoSlide();
+  });
+
+  document.querySelector(".cta-prev").addEventListener("click", () => {
+    stopAutoSlide();
+    prevSlide();
+    startAutoSlide();
+  });
+
+  dots.forEach(dot => {
+    dot.addEventListener("click", (e) => {
+      stopAutoSlide();
+      showSlide(parseInt(e.target.dataset.slide));
+      startAutoSlide();
+    });
+  });
+
+  showSlide(currentIndex);
+  startAutoSlide();
+});</script>
 {% endblock %}

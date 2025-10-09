@@ -109,7 +109,7 @@ class Service(models.Model):
     image2 = models.ImageField(upload_to='Services/', null=True, blank=True)
     image3 = models.ImageField(upload_to='Services/', null=True, blank=True)
     
-
+    field = models.ForeignKey('Field', on_delete=models.CASCADE, verbose_name="Dziedzina", null=True, blank=True)
     
     def __str__(self):
         return f"{self.id}. {self.title}"
@@ -117,4 +117,18 @@ class Service(models.Model):
     class Meta:
         verbose_name = "Usługa"
         verbose_name_plural = "Usługi"
+        ordering = ['id']
+
+    
+
+class Field(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Nazwa dziedziny")
+    description = models.CharField(max_length=200, verbose_name="Opis dziedziny")
+
+    def __str__(self):
+        return f"{self.name}"
+
+    class Meta:
+        verbose_name = "Dziedzina"
+        verbose_name_plural = "Dziedziny"
         ordering = ['id']

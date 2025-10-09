@@ -1076,49 +1076,76 @@ button:active {
 }
 
 
-
 .cta-section {
-    position: absolute;
-    height: 500px;
-    overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 40vh; /* 2/5 strony = 40% wysokości viewport */
+  overflow: hidden;
+  box-shadow: var(--shadow);
 }
 
-.cta-bg-slider {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
+.cta-slider {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .cta-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: none;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
 }
 
 .cta-slide.active {
-    display: block;
-    opacity: 1;
+  opacity: 1;
 }
-
 
 .cta-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Najważniejsze - zdjęcie wypełni kontener bez deformacji */
+  display: block;
 }
 
-.cta-content {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    color: white;
-    padding-top: 150px;
+.cta-prev, .cta-next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  padding: 10px;
+  margin-top: -22px;
+  color: white;
+  font-weight: bold;
+  font-size: 24px;
+  background: rgba(0,0,0,0.4);
+  border: none;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+.cta-prev { left: 15px; }
+.cta-next { right: 15px; }
+
+.cta-dots {
+  text-align: center;
+  position: absolute;
+  bottom: 15px;
+  width: 100%;
+  z-index: 10;
+}
+
+.cta-dot {
+  cursor: pointer;
+  height: 12px;
+  width: 12px;
+  margin: 0 3px;
+  background-color: rgba(255,255,255,0.6);
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.4s ease;
+}
+
+.cta-dot.active {
+  background-color: white;
 }

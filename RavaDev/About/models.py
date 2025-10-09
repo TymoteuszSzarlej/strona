@@ -11,3 +11,15 @@ class TeamMember(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+class Info(models.Model):
+    title = models.TextField(max_length=200, verbose_name="Tytuł")
+    content = models.CharField(verbose_name="Treść")
+    def __str__(self):
+        return "Informacje"
+    
+    class Meta:
+        verbose_name = "Informacja"
+        verbose_name_plural = "Informacje"
+        ordering = ['id']
