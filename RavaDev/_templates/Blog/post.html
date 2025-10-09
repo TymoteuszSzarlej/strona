@@ -1,156 +1,263 @@
 {% extends 'base.html' %}
 
 {% block appTitle %}Blog{% endblock %}
-{% block moduleTitle %}
-Post
-<strong>
-    {{post.title}}
-</strong>
-{% endblock %}
-
+{% block moduleTitle %}Post - {{post.title}}{% endblock %}
 {% block appHeader %}Blog{% endblock %}
-
-{% block moduleHeader %}
-Post
-<strong>
-    {{post.title}}
-</strong>
-{% endblock %}
+{% block moduleHeader %}{{post.title}}{% endblock %}
 
 {% block content %}
-<!-- Karta posta bloga -->
-<section>
-    <div class="container glass widget-container">
-        <!-- Górna część: dane elementu -->
-        <h2>{{post.title}}</h2>
+<div class="container glass widget-container blog-post">
+    <!-- Header section -->
+    <header class="post-header">
+        <h1 class="post-title">{{post.title}}</h1>
+        <div class="post-meta">
+            <span><i class="fas fa-folder"></i> {{post.category}}</span>
+            <span><i class="fas fa-calendar"></i> {{post.published_date}}</span>
+            <span><i class="fas fa-user"></i> {{post.author}}</span>
+            <span><i class="fas fa-eye"></i> {{post.views}} wyświetleń</span>
+        </div>
+    </header>
 
-        <!-- Dolna część: podział zawartości -->
-        <div class="content-split" style="display: flex; justify-content: space-between; width: 80%;">
-            <!-- Lewa kolumna: zdjęcie -->
-            <div class="image-container" style="width: 100%;">
-                {% if post.image %}
-                <section class="post image">
-                    <div>
-                        <img src="{{post.image.url}}" alt="{{post.title}}">
+    <!-- Main content section -->
+    <div class="post-main-content">
+        {% if post.image %}
+        <div class="post-image">
+            <img src="{{post.image.url}}" alt="{{post.title}}">
+        </div>
+        {% endif %}
+        
+        <div class="post-content">
+            {{post.content|safe}}
+        </div>
+    </div>
+
+    <!-- Reviews section -->
+    <div class="post-reviews">
+        <h2>Opinie i komentarze</h2>
+        
+        <div class="reviews-list">
+            {% for review in reviews %}
+            <div class="review-card">
+                <div class="review-header">
+                    <h4>{{review.reviewer_name}}</h4>
+                    <div class="review-stars">
+                        {% for i in "12345" %}
+                        {% if forloop.counter <= review.rating %}
+                        <strong class="star-filled">★</strong>
+                        {% else %}
+                        <span class="star-empty">★</span>
+                        {% endif %}
+                        {% endfor %}
                     </div>
-                </section>
-                {% endif %}
+                </div>
+                <div class="review-content">
+                    <p>{{ review.comment }}</p>
+                </div>
+                <div class="review-footer">
+                    <small>{{ review.created_date }}</small>
+                </div>
             </div>
-
-            <!-- Prawa kolumna: informacje -->
-            <section class="post info">
-                <div>
-                    <h4>Kategoria</h4>
-                    <p>{{post.category}}</p>
-                </div>
-                <div>
-                    <h4>Data publikacji</h4>
-                    <p>{{post.published_date}}</p>
-                </div>
-                <div>
-                    <h4>Autor</h4>
-                    <p>{{post.author}}</p>
-                </div>
-                <div>
-                    <h4>Wyświetlenia</h4>
-                    <p>{{post.views}}</p>
-                </div>
-                <div>
-                    <h4>Opinie</h4>
-                    {% for review in reviews %}
-                    <div class="review">
-                        <h6>{{review.reviewer_name}}</h6>
-                        <div class="review-stars">
-                            {% for i in "12345" %}
-                            {% if forloop.counter <= review.rating %}
-                            <strong class="star-filled">★</strong>
-                            {% else %}
-                            <span class="star-empty">★</span>
-                            {% endif %}
-                            {% endfor %}
-                        </div>
-                        <p>{{ review.comment }}</p>
-                        <small>{{ review.created_date }}</small>
-                    </div>
-                    <hr>
-                    {% empty %}
-                    <p>Brak opinii dla tego posta.</p>
-                    {% endfor %}
-                </div>
-                <div>
-                    <h4>Dodaj opinię</h4>
-                    <form method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="post_id" value="{{ post.id }}">
-                        <div>
-                            <label for="reviewer_name">Imię:</label>
-                            <input type="text" id="reviewer_name" name="reviewer_name" required>
-                        </div>
-                        
-                        <div>
-                            <label>Ocena:</label>
-                            <div class="star-rating">
-                                {% for i in "54321" %}
-                                <input type="radio" id="star{{i}}" name="rating" value="{{i}}">
-                                <label for="star{{i}}">★</label>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <label for="comment">Komentarz:</label>
-                            <textarea id="comment" name="comment" rows="4" required></textarea>
-                        </div>
-                        
-                        <button type="submit">Wyślij opinię</button>
-                    </form>
-                </div>
-            </section>
+            {% empty %}
+            <p class="no-reviews">Brak opinii dla tego posta.</p>
+            {% endfor %}
         </div>
 
-        <section class="post content">
-            <div>
-                <p>{{post.content|safe}}</p>
-            </div>
-        </section>
+        <!-- Add review form -->
+        <div class="add-review">
+            <h3>Dodaj opinię</h3>
+            <form method="post" class="review-form">
+                {% csrf_token %}
+                <input type="hidden" name="post_id" value="{{ post.id }}">
+                
+                <div class="form-group">
+                    <label for="reviewer_name">Imię:</label>
+                    <input type="text" id="reviewer_name" name="reviewer_name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Ocena:</label>
+                    <div class="star-rating">
+                        {% for i in "54321" %}
+                        <input type="radio" id="star{{i}}" name="rating" value="{{i}}">
+                        <label for="star{{i}}">★</label>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="comment">Komentarz:</label>
+                    <textarea id="comment" name="comment" rows="4" required></textarea>
+                </div>
+                
+                <button type="submit" class="submit-review">Wyślij opinię</button>
+            </form>
+        </div>
     </div>
-</section>
+</div>
 
 <style>
+    .blog-post {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .post-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .post-title {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .post-meta {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        color: #666;
+    }
+
+    .post-meta span {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .post-main-content {
+        margin-bottom: 3rem;
+    }
+
+    .post-image {
+        margin-bottom: 2rem;
+    }
+
+    .post-image img {
+        width: 100%;
+        height: auto;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .post-content {
+        font-size: 1.1rem;
+        line-height: 1.8;
+    }
+
+    .post-reviews {
+        border-top: 2px solid #eee;
+        padding-top: 2rem;
+    }
+
+    .reviews-list {
+        display: grid;
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    .review-card {
+        background: rgba(255,255,255,0.8);
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .review-form {
+        max-width: 600px;
+        margin: 2rem auto;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+    }
+
+    .submit-review {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background 0.3s;
+    }
+
+    .submit-review:hover {
+        background: #5a6fd6;
+    }
+
+    /* Zachowujemy istniejące style gwiazdek */
     .star-rating {
         display: flex;
         flex-direction: row-reverse;
-        justify-content: flex-end;
+        justify-content: flex-start;
         font-size: 2em;
     }
+
     .star-rating input {
         display: none;
     }
+
     .star-rating label {
         color: #ddd;
         cursor: pointer;
         padding: 0 2px;
     }
+
     .star-rating input:checked ~ label {
         color: gold;
     }
+
     .star-rating label:hover,
     .star-rating label:hover ~ label {
         color: gold;
     }
-    
-    .review-stars {
-        font-size: 1.2em;
-        margin: 5px 0;
-    }
+
     .star-filled {
         color: gold;
     }
+
     .star-empty {
         color: #ddd;
     }
-    .review {
-        margin-bottom: 15px;
+
+    @media (max-width: 768px) {
+        .post-meta {
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .blog-post {
+            padding: 1rem;
+        }
+        
+        .post-title {
+            font-size: 2rem;
+        }
     }
 </style>
 {% endblock %}
