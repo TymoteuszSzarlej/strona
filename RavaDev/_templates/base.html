@@ -18,6 +18,14 @@
             </a>
             
             <ul class="nav-links" id="navLinks">
+                <button class="hamburger" id="hamburger">
+                <span><a href="{% url 'Main:index' %}" class="nav-link">Strona Główna</a></span>
+                <span><a href="{% url 'About:about' %}" class="nav-link">O Nas</a></span>
+                <span><a href="{% url 'Blog:blog' %}" class="nav-link">Blog</a></span>
+                <span><a href="{% url 'Services:services' %}" class="nav-link">Usługi</a></span>
+                <span><a href="{% url 'Projects:projects' %}" class="nav-link">Realizacje</a></span>
+                <span><a href="{% url 'Contact:contact' %}" class="nav-link">Kontakt</a></span>
+            </button>
                 <li><a href="{% url 'Main:index' %}" class="nav-link">Strona Główna</a></li>
                 <li><a href="{% url 'About:about' %}" class="nav-link">O Nas</a></li>
                 <li><a href="{% url 'Blog:blog' %}" class="nav-link">Blog</a></li>
@@ -27,9 +35,12 @@
             </ul>
 
             <button class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+                <span><a href="{% url 'Main:index' %}" class="nav-link">Strona Główna</a></span>
+                <span><a href="{% url 'About:about' %}" class="nav-link">O Nas</a></span>
+                <span><a href="{% url 'Blog:blog' %}" class="nav-link">Blog</a></span>
+                <span><a href="{% url 'Services:services' %}" class="nav-link">Usługi</a></span>
+                <span><a href="{% url 'Projects:projects' %}" class="nav-link">Realizacje</a></span>
+                <span><a href="{% url 'Contact:contact' %}" class="nav-link">Kontakt</a></span>
             </button>
         </div>
     </nav>
