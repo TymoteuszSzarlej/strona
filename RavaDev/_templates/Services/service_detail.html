@@ -1,140 +1,113 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block appTitle %}Usługi - {{ service.title }}{% endblock %}
-{% block moduleTitle %}Szczegóły usługi{% endblock %}
-
-{% block appHeader %}
-Usługi
-{% endblock %}
-
-{% block moduleHeader %}
-{{ service.title }}
-{% endblock %}
-
 {% block content %}
 <div class="service-detail-container">
-    <div class="service-header">
+    <!-- Header Section -->
+    <header class="service-header">
         <div class="service-meta">
             <span class="service-number">Usługa #{{ service.nr }}</span>
             <span class="field-tag">{{ service.field.name }}</span>
         </div>
         <h1 class="service-title">{{ service.title }}</h1>
+    </header>
+
+    <!-- Main Info Section -->
+    <div class="main-info-section">
+        {% if service.image1 %}
+        <div class="primary-image">
+            <img src="{{ service.image1.url }}" alt="Główne zdjęcie" class="featured-image">
+        </div>
+        {% endif %}
+        
+        <div class="key-details">
+            <div class="price-highlight">
+                <h3>Zakres cenowy (lokalny)</h3>
+                <p class="price-range">{{ service.local_price_min }} - {{ service.local_price_max }} PLN</p>
+            </div>
+            
+            <div class="market-status">
+                <div class="status-item">
+                    <strong>Popyt:</strong>
+                    <span class="badge {{ service.demand_level }}">
+                        {{ service.get_demand_level_display }}
+                    </span>
+                </div>
+                <div class="status-item">
+                    <strong>Podaż lokalna:</strong>
+                    <span class="badge {{ service.local_supply }}">
+                        {{ service.get_local_supply_display }}
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="service-content">
-        <!-- Galeria zdjęć -->
-        {% if service.image1 or service.image2 or service.image3 %}
-        <section class="service-gallery">
-            <div class="gallery-grid">
-                {% if service.image1 %}
-                <img src="{{ service.image1.url }}" alt="Zdjęcie 1" class="gallery-image">
-                {% endif %}
-                {% if service.image2 %}
-                <img src="{{ service.image2.url }}" alt="Zdjęcie 2" class="gallery-image">
-                {% endif %}
-                {% if service.image3 %}
-                <img src="{{ service.image3.url }}" alt="Zdjęcie 3" class="gallery-image">
-                {% endif %}
-            </div>
-        </section>
-        {% endif %}
+    <!-- Short Description -->
+    <section class="short-description">
+        <h2>Opis usługi</h2>
+        <div class="description-text">
+            {{ service.description|truncatewords:100 }}
+        </div>
+    </section>
 
-        <section class="service-description">
-            <h2>Opis usługi</h2>
-            <div class="description-text">
-                {{ service.description|linebreaks }}
-            </div>
-        </section>
+    <!-- Second Image and Features -->
+    {% if service.image2 %}
+    <div class="secondary-image">
+        <img src="{{ service.image2.url }}" alt="Dodatkowe zdjęcie" class="full-width-image">
+    </div>
+    {% endif %}
 
-        {% if service.feature_1_name or service.feature_2_name %}
-        <section class="service-features">
-            <h2>Cechy usługi</h2>
-            <div class="features-grid">
-                {% if service.feature_1_name %}
-                <div class="feature-card">
-                    <div class="feature-header">
-                        <h3>{{ service.feature_1_name }}</h3>
-                        <span class="range-number">Zakres #{{ service.range_number_1 }}</span>
-                    </div>
-                    <div class="feature-content">
-                        <p>{{ service.feature_1_ranges }}</p>
-                    </div>
-                </div>
-                {% endif %}
-
-                {% if service.feature_2_name %}
-                <div class="feature-card">
-                    <div class="feature-header">
-                        <h3>{{ service.feature_2_name }}</h3>
-                        <span class="range-number">Zakres #{{ service.range_number_2 }}</span>
-                    </div>
-                    <div class="feature-content">
-                        <p>{{ service.feature_2_ranges }}</p>
-                    </div>
-                </div>
-                {% endif %}
-            </div>
-        </section>
-        {% endif %}
-
-        <section class="market-analysis">
-            <h2>Analiza rynkowa</h2>
-            <div class="analysis-grid">
-                <div class="analysis-card">
-                    <h3>Popyt i podaż</h3>
-                    <div class="analysis-content">
-                        <p>
-                            <strong>Poziom popytu:</strong> 
-                            <span class="badge {{ service.demand_level }}">
-                                {{ service.get_demand_level_display }}
-                            </span>
-                        </p>
-                        <p>
-                            <strong>Podaż lokalna:</strong>
-                            <span class="badge {{ service.local_supply }}">
-                                {{ service.get_local_supply_display }}
-                            </span>
-                        </p>
-                        <p class="coefficient">
-                            Współczynnik popytu: {{ service.demand_coefficient }}
-                        </p>
-                        <p class="coefficient">
-                            Współczynnik podaży: {{ service.supply_coefficient }}
-                        </p>
-                    </div>
-                </div>
-
-                <div class="analysis-card">
-                    <h3>Wycena</h3>
-                    <div class="analysis-content">
-                        <div class="price-range">
-                            <h4>Ceny rynkowe:</h4>
-                            <p>{{ service.price_min }} - {{ service.price_max }} PLN</p>
-                        </div>
-                        <div class="price-range">
-                            <h4>Ceny lokalne:</h4>
-                            <p>{{ service.local_price_min }} - {{ service.local_price_max }} PLN</p>
-                        </div>
-                        <p class="coefficient">
-                            Współczynnik wyceny: {{ service.valuation_coefficient }}
-                        </p>
-                        <p class="final-valuation">
-                            Wycena końcowa: {{ service.valuation }} PLN
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            {% if service.market_relation %}
-            <div class="market-relation">
-                <h3>Relacja rynkowa</h3>
-                <p>{{ service.market_relation|linebreaks }}</p>
+    <!-- Detailed Features -->
+    {% if service.feature_1_name or service.feature_2_name %}
+    <section class="service-features">
+        <div class="features-grid">
+            {% if service.feature_1_name %}
+            <div class="feature-card">
+                <h3>{{ service.feature_1_name }}</h3>
+                <p>{{ service.feature_1_ranges }}</p>
+                <span class="range-number">Zakres #{{ service.range_number_1 }}</span>
             </div>
             {% endif %}
-        </section>
-    </div>
 
+            {% if service.feature_2_name %}
+            <div class="feature-card">
+                <h3>{{ service.feature_2_name }}</h3>
+                <p>{{ service.feature_2_ranges }}</p>
+                <span class="range-number">Zakres #{{ service.range_number_2 }}</span>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Third Image -->
+    {% if service.image3 %}
+    <div class="tertiary-image">
+        <img src="{{ service.image3.url }}" alt="Dodatkowe zdjęcie" class="full-width-image">
+    </div>
+    {% endif %}
+
+    <!-- Technical Details -->
+    <section class="technical-details">
+        <h2>Szczegóły techniczne</h2>
+        <div class="details-grid">
+            <div class="detail-card">
+                <h3>Ceny rynkowe</h3>
+                <p>{{ service.price_min }} - {{ service.price_max }} PLN</p>
+                <p class="coefficient">Współczynnik ceny: {{ service.price_coefficient }}</p>
+            </div>
+            
+            <div class="detail-card">
+                <h3>Współczynniki</h3>
+                <p>Popyt: {{ service.demand_coefficient }}</p>
+                <p>Podaż: {{ service.supply_coefficient }}</p>
+                <p>Wycena: {{ service.valuation_coefficient }}</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Actions -->
     <div class="service-actions">
         <a href="{% url 'Services:services' %}" class="btn btn-back">
             ← Powrót do listy usług
@@ -144,11 +117,12 @@ Usługi
         </a>
     </div>
 </div>
-{% endblock %}
-<style>.service-detail-container {
-    max-width: 1000px;
+
+<style>
+.service-detail-container {
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 2rem;
 }
 
 .service-header {
@@ -186,52 +160,74 @@ Usługi
     font-weight: 700;
 }
 
-.service-content {
+.main-info-section {
     display: grid;
-    gap: 30px;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
 }
 
-.service-gallery {
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 10px;
-}
-
-.gallery-image {
+.primary-image img {
     width: 100%;
-    border-radius: 8px;
-    object-fit: cover;
-    height: 200px;
-}
-
-.service-description {
-    background: #f8f9fa;
-    padding: 30px;
+    height: auto;
     border-radius: 12px;
-    border-left: 4px solid #667eea;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.service-description h2 {
-    color: #2d3748;
-    margin-bottom: 20px;
-    font-size: 1.8em;
+.key-details {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
-.description-text {
-    font-size: 1.1em;
-    line-height: 1.7;
-    color: #4a5568;
+.price-highlight {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
 }
 
-.service-features h2 {
-    color: #2d3748;
-    margin-bottom: 25px;
-    font-size: 1.8em;
+.price-highlight h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+}
+
+.price-range {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.market-status {
+    display: grid;
+    gap: 1rem;
+}
+
+.status-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.full-width-image {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    margin: 2rem 0;
+}
+
+.short-description {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 12px;
+    margin: 2rem 0;
+}
+
+.service-features {
+    margin: 2rem 0;
 }
 
 .features-grid {
@@ -275,83 +271,25 @@ Usługi
     margin: 0;
 }
 
-.market-analysis {
+.technical-details {
     background: #f8f9fa;
-    padding: 30px;
+    padding: 2rem;
     border-radius: 12px;
-    margin-top: 30px;
+    margin-top: 2rem;
 }
 
-.market-analysis h2 {
-    color: #2d3748;
-    margin-bottom: 20px;
-    font-size: 1.8em;
-}
-
-.analysis-grid {
+.details-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
 }
 
-.analysis-card {
+.detail-card {
     background: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.analysis-card h3 {
-    color: #667eea;
-    margin: 0 0 15px 0;
-    font-size: 1.3em;
-    font-weight: 600;
-}
-
-.analysis-content p {
-    color: #4a5568;
-    line-height: 1.6;
-    margin: 0;
-}
-
-.badge {
-    padding: 5px 10px;
-    border-radius: 12px;
-    font-size: 0.9em;
-    font-weight: 500;
-    display: inline-block;
-    margin-top: 5px;
-}
-
-.badge.demand_high {
-    background-color: rgba(22, 163, 74, 0.1);
-    color: #16a34a;
-}
-
-.badge.demand_medium {
-    background-color: rgba(234, 179, 8, 0.1);
-    color: #ca8a04;
-}
-
-.badge.demand_low {
-    background-color: rgba(220, 38, 38, 0.1);
-    color: #dc2626;
-}
-
-.badge.supply_high {
-    background-color: rgba(22, 163, 74, 0.1);
-    color: #16a34a;
-}
-
-.badge.supply_medium {
-    background-color: rgba(234, 179, 8, 0.1);
-    color: #ca8a04;
-}
-
-.badge.supply_low {
-    background-color: rgba(220, 38, 38, 0.1);
-    color: #dc2626;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .service-actions {
@@ -395,31 +333,11 @@ Usługi
 
 /* Responsywność */
 @media (max-width: 768px) {
-    .service-header {
-        padding: 20px;
-    }
-    
-    .service-title {
-        font-size: 2em;
-    }
-    
-    .service-description,
-    .feature-card {
-        padding: 20px;
-    }
-    
-    .features-grid {
+    .main-info-section {
         grid-template-columns: 1fr;
     }
     
-    .service-actions {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
+    .key-details {
+        order: -1;
     }
-    
-    .btn {
-        width: 100%;
-        text-align: center;
-    }
-}</style>
+}

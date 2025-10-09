@@ -5,7 +5,8 @@ class Service(models.Model):
     nr = models.IntegerField(unique=True, verbose_name="Numer usługi")
     title = models.CharField(max_length=200, verbose_name="Nazwa usługi")
     description = models.TextField(verbose_name="Opis usługi")
-    
+    long_description = models.TextField(verbose_name="Długi opis usługi", null=True, blank=True)
+
     # Cechy i ich zakresy
     feature_1_name = models.CharField(max_length=100, verbose_name="Nazwa cechy 1")
     feature_1_ranges = models.CharField(max_length=200, verbose_name="Zakresy cechy 1")
