@@ -57,7 +57,7 @@ Posty należące do kategorii
                     <br>
                     <p>Kategoria: <strong>{{ post.category.name }}</strong></p>
                     <p>Data publikacji: <strong>{{ post.created_at|date:"d.m.Y" }}</strong></p>
-                    <p>{{ post.content|safe|truncatewords:64 }}</p>
+                    <p>{{ post.content|safe|truncatewords:16 }}</p>
                     <a href="{% url 'Blog:post' post.id %}">Czytaj więcej</a>
                 </div>
                 
