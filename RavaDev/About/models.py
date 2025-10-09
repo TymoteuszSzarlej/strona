@@ -15,7 +15,7 @@ class TeamMember(models.Model):
 
 class Info(models.Model):
     title = models.TextField(max_length=200, verbose_name="Tytuł")
-    content = models.CharField(verbose_name="Treść")
+    content = models.CharField(verbose_name="Treść", max_length=10240)
     def __str__(self):
         return "Informacje"
     
