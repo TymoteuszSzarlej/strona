@@ -27,7 +27,7 @@ def index(request):
                 rel_file = os.path.join(rel_dir, file) if rel_dir != '.' else file
                 image_paths.append(rel_file.replace('\\', '/'))
     print(image_paths)  # Debug: print the list of image paths
-    return render(request, 'Main/index.html.jinja', {
+    return render(request, 'Main/index.html copy.jinja', {
         'cta_images': image_paths,
         'categories': categories,
         'services': services,

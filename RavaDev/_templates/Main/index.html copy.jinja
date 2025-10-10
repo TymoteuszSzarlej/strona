@@ -1,0 +1,414 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-content glass">
+    <h1 class="glitch" data-text="RavaDev">RavaDev</h1>
+    <p class="hero-subtitle">Technologia bliżej ludzi</p>
+    <p class="hero-description">
+      Profesjonalny outsourcing IT, tworzenie oprogramowania oraz kompleksowe wsparcie technologiczne dla Twojej firmy.
+    </p>
+    <div class="hero-buttons">
+      <a href="/contact" class="btn btn-primary">
+        <span class="btn-glow"></span>
+        <span class="btn-text">Bezpłatna wycena</span>
+      </a>
+      <a href="/services" class="btn btn-outline">
+        <span class="btn-text">Poznaj usługi</span>
+      </a>
+    </div>
+    <div class="hero-features">
+      <span>Bezpłatna wycena</span>
+      <span>Wdrożenia lokalne i chmurowe</span>
+      <span>Wsparcie 24/7</span>
+    </div>
+  </div>
+  
+</section>
+
+<section id="cta" class="cta-section">
+  <div class="cta-slider">
+    {% for img in cta_images %}
+      <div class="cta-slide {% if forloop.first %}active{% endif %}">
+        <img src="_media/{{ img }}" alt="Slajd {{ forloop.counter }}">
+      </div>
+    {% endfor %}
+    <!-- Strzałki -->
+    <button class="cta-prev">&#10094;</button>
+    <button class="cta-next">&#10095;</button>
+    <!-- Kropki -->
+    <div class="cta-dots">
+      {% for img in cta_images %}
+        <span class="cta-dot {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}"></span>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Services Preview -->
+<section class="services-preview">
+  <h2 class="section-title">Nasze usługi</h2>
+  <div class="services-grid">
+    {% for field in fields %}
+    <div class="service-card glass">
+      <div class="service-icon">
+        <i class="fas {{ field.icon }}"></i>
+      </div>
+      <h3>{{ field.name }}</h3>
+      <p>{{ field.description }}</p>
+      <a href="{% url 'Services:field_detail' field.id %}" class="card-link">
+        Dowiedz się więcej
+        <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section id="realizacje" class="portfolio-section">
+  <h2>Realizacje</h2>
+{% for project in projects %}
+    <!-- Karta projektu -->
+    <a href="{% url 'Projects:project_detail' project.id %}">
+        <div class="container glass widget-container">
+            
+            <!-- Górna część: dane elementu -->
+            <h4>{{ project.title }}</h4>
+
+            <!-- Dolna część: podział zawartości -->
+            <div class="content-split" style="display: flex; justify-content: space-between; width: 80%;">
+                
+                <!-- Lewa kolumna: zdjęcie -->
+                <div class="image-container" style="width: 100%;">
+                    <img src="{{ project.main_image.url }}" 
+                         alt="Zdjęcie {{ project.title }}" 
+                         style="max-width: 100%; height: auto; border-radius: 4px;" class="mini">
+                </div>
+
+                <!-- Prawa kolumna: informacje -->
+                <div class="container" style="width: 100%;">
+                    <h6>{{ project.client }}</h6>
+                    <br>
+                    <p>Kategoria: <strong>{{ project.category }}</strong></p>
+                    <p>Data realizacji: <strong>{{ project.completion_date|date:"d.m.Y" }}</strong></p>
+                    <p>{{ project.description|truncatechars:256 }}</p>
+                    <a href="{% url 'Projects:project_detail' project.id %}">Zobacz projekt</a>
+                </div>
+                
+            </div>
+        </div>
+    </a>
+{% endfor %}
+</section>
+
+<section id="kontakt" class="contact-section">
+  <h2>Kontakt</h2>
+  
+<div class="contact-form-container">
+    <form method="post" novalidate>
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="{{ form.sender.id_for_label }}">{{ form.sender.label }}:</label>
+            {{ form.sender }}
+            {% if form.sender.errors %}
+            <div class="error-list">
+                {% for error in form.sender.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.email.id_for_label }}">{{ form.email.label }}:</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+            <div class="error-list">
+                {% for error in form.email.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.phoneCode.id_for_label }}">Kod kierunkowy:</label>
+            {{ form.phoneCode }}
+            {% if form.phoneCode.errors %}
+            <div class="error-list">
+                {% for error in form.phoneCode.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.phoneNumber.id_for_label }}">Numer telefonu:</label>
+            {{ form.phoneNumber }}
+            {% if form.phoneNumber.errors %}
+            <div class="error-list">
+                {% for error in form.phoneNumber.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.content.id_for_label }}">{{ form.content.label }}:</label>
+            {{ form.content }}
+            {% if form.content.errors %}
+            <div class="error-list">
+                {% for error in form.content.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="submit-btn">Wyślij wiadomość</button>
+    </form>
+</div>
+
+
+</section>
+
+<style>
+:root {
+  --bg-dark: #0a0a0a;
+  --bg-darker: #050505;
+  --bg-card: rgba(255, 255, 255, 0.03);
+  --text-light: #ffffff;
+  --text-muted: #b0b0b0;
+  --primary: #00ffd5;
+  --primary-glow: 0 0 20px rgba(0, 255, 213, 0.3);
+  --secondary: #ff00ff;
+  --secondary-glow: 0 0 20px rgba(255, 0, 255, 0.3);
+  --accent-gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+  --card-border: rgba(0, 255, 213, 0.1);
+  --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --radius: 16px;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+.hero {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-darker);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--accent-gradient);
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.hero-content {
+  text-align: center;
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.glitch {
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--text-light);
+  text-shadow: var(--primary-glow);
+  position: relative;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  clip: rect(0, 0, 0, 0);
+}
+
+.glitch::before {
+  left: -2px;
+  text-shadow: 2px 0 var(--primary);
+  animation: glitch-1 2s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+  left: 2px;
+  text-shadow: -2px 0 var(--secondary);
+  animation: glitch-2 3s infinite linear alternate-reverse;
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  color: var(--primary);
+  margin: 1rem 0;
+}
+
+.hero-description {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.btn {
+  position: relative;
+  padding: 1rem 2rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition);
+  overflow: hidden;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--bg-dark);
+}
+
+.btn-outline {
+  border: 2px solid var(--primary);
+  color: var(--primary);
+}
+
+.btn-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--primary);
+  filter: blur(20px);
+  opacity: 0.5;
+  transition: var(--transition);
+}
+
+.btn:hover .btn-glow {
+  opacity: 0.8;
+}
+
+.hero-features {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.services-preview {
+  padding: 6rem 2rem;
+  background: var(--bg-dark);
+}
+
+.section-title {
+  text-align: center;
+  color: var(--text-light);
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.service-card {
+  padding: 2rem;
+  border-radius: var(--radius);
+  background: var(--bg-card);
+  border: 1px solid var(--card-border);
+  transition: var(--transition);
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--primary-glow);
+}
+
+.service-icon {
+  font-size: 2rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary);
+  text-decoration: none;
+  margin-top: 1rem;
+  transition: var(--transition);
+}
+
+.card-link:hover {
+  gap: 1rem;
+}
+
+@keyframes glitch-1 {
+  0% { clip: rect(20px, 9999px, 15px, 0); }
+  100% { clip: rect(25px, 9999px, 99px, 0); }
+}
+
+@keyframes glitch-2 {
+  0% { clip: rect(80px, 9999px, 5px, 0); }
+  100% { clip: rect(10px, 9999px, 99px, 0); }
+}
+</style>
+{% endblock %}
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Parallax effect for hero section
+  const hero = document.querySelector('.hero');
+  window.addEventListener('scroll', () => {
+    const scroll = window.pageYOffset;
+    hero.style.backgroundPositionY = `${scroll * 0.5}px`;
+  });
+
+  // Intersection Observer for fade-in animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('fade-in');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.service-card').forEach(card => {
+    observer.observe(card);
+  });
+});
+</script>
+{% endblock %}
