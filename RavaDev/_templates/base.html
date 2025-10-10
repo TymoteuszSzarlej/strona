@@ -72,6 +72,7 @@
             }
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -182,6 +183,9 @@
         </div>
     </footer>
 
+    <!-- Particles.js container -->
+    <div id="particles-js"></div>
+
     <!-- JavaScript -->
     <script>
         // Navbar scroll effect
@@ -237,6 +241,44 @@
             });
         });
 
+        // Animate sections on scroll
+        const observerOptions = {
+          threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+          observer.observe(section);
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+              behavior: 'smooth'
+            });
+          });
+        });
+
+        // Add hover effect for cards
+        document.querySelectorAll('.glass').forEach(element => {
+          element.addEventListener('mousemove', (e) => {
+            const rect = element.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            element.style.setProperty('--mouse-x', `${x}px`);
+            element.style.setProperty('--mouse-y', `${y}px`);
+          });
+        });
     </script>
     {% block extra_js %}{% endblock %}
 </body>
