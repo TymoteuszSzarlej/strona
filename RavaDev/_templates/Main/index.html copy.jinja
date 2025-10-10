@@ -47,24 +47,46 @@
   </div>
 </section>
 
-<!-- Services Preview -->
-<section class="services-preview">
-  <h2 class="section-title">Nasze usługi</h2>
-  <div class="services-grid">
-    {% for field in fields %}
-    <div class="service-card glass">
-      <div class="service-icon">
-        <i class="fas {{ field.icon }}"></i>
-      </div>
-      <h3>{{ field.name }}</h3>
-      <p>{{ field.description }}</p>
-      <a href="{% url 'Services:field_detail' field.id %}" class="card-link">
-        Dowiedz się więcej
-        <i class="fas fa-arrow-right"></i>
-      </a>
-    </div>
-    {% endfor %}
-  </div>
+<section id="uslugi" class="services-section">
+  <h2>Usługi</h2>
+
+{% for field in fields %}
+<div class="container glass widget-container" style="margin-bottom: 2rem;">
+    <h2>{{ field.name }}</h2>
+{% for service in services %}{% if service.field == field %}
+    <!-- Karta usługi -->
+    <a href="{% url 'Services:service_detail' service.id %}">
+        <div class="container glass widget-container">
+            
+            <!-- Górna część: dane elementu -->
+            <h4>{{ service.name }}</h4>
+
+            <!-- Dolna część: podział zawartości -->
+            <div class="content-split" style="display: flex; justify-content: space-between; width: 80%;">
+                
+                <!-- Lewa kolumna: zdjęcie -->
+                <div class="image-container" style="width: 100%;">
+                    <img src="{{ service.icon.url }}" 
+                         alt="Ikona {{ service.name }}" 
+                         style="max-width: 100%; height: auto; border-radius: 4px;" class="mini">
+                </div>
+
+                <!-- Prawa kolumna: informacje -->
+                <div class="container" style="width: 100%;">
+                    <h6>{{ service.field.name }}</h6>
+                    <br>
+                    <p>Cena: <strong>{{ service.price }}</strong></p>
+                    <p>Czas realizacji: <strong>{{ service.duration }}</strong></p>
+                    <p>{{ service.description|truncatechars:256 }}</p>
+                </div>
+                
+            </div>
+        </div>
+    </a>
+{% endif %}{% endfor %}
+</div>
+{% endfor %}
+
 </section>
 
 <section id="realizacje" class="portfolio-section">
@@ -102,6 +124,7 @@
     </a>
 {% endfor %}
 </section>
+
 
 <section id="kontakt" class="contact-section">
   <h2>Kontakt</h2>
@@ -173,6 +196,9 @@
         <button type="submit" class="submit-btn">Wyślij wiadomość</button>
     </form>
 </div>
+
+
+</section>
 
 
 </section>
