@@ -24,55 +24,11 @@ Poznaj listę naszych usług
     <a href="{% url 'Services:service_detail' service.id %}">
         <div class="container glass widget-container service-card">
             <div class="service-header">
-                <span class="service-number">#{{ service.nr }}</span>
+
                 <h3 class="service-title">{{ service.title }}</h3>
             </div>
 
-            <div class="service-content">
-                <!-- Galeria zdjęć -->
-                <div class="service-gallery">
-                    {% if service.image1 %}
-                    <img src="{{ service.image1.url }}" alt="Zdjęcie 1" class="service-image">
-                    {% endif %}
-                    {% if service.image2 %}
-                    <img src="{{ service.image2.url }}" alt="Zdjęcie 2" class="service-image">
-                    {% endif %}
-                    {% if service.image3 %}
-                    <img src="{{ service.image3.url }}" alt="Zdjęcie 3" class="service-image">
-                    {% endif %}
-                </div>
 
-                <div class="service-info">
-                    <div class="service-features">
-                        <div class="feature">
-                            <h4>{{ service.feature_1_name }}</h4>
-                            <p>{{ service.feature_1_ranges }}</p>
-                        </div>
-                        <div class="feature">
-                            <h4>{{ service.feature_2_name }}</h4>
-                            <p>{{ service.feature_2_ranges }}</p>
-                        </div>
-                    </div>
-
-                    <div class="market-info">
-                        <div class="demand-supply">
-                            <h4>Popyt i podaż</h4>
-                            <p>Poziom popytu: <span class="badge">{{ service.get_demand_level_display }}</span></p>
-                            <p>Podaż lokalna: <span class="badge">{{ service.get_local_supply_display }}</span></p>
-                        </div>
-
-                        <div class="pricing">
-                            <h4>Zakres cenowy</h4>
-                            <p>Rynkowy: {{ service.price_min }} - {{ service.price_max }} PLN</p>
-                            <p>Lokalny: {{ service.local_price_min }} - {{ service.local_price_max }} PLN</p>
-                        </div>
-                    </div>
-
-                    <div class="service-description">
-                        <p>{{ service.description|truncatechars:300 }}</p>
-                    </div>
-                </div>
-            </div>
         </div>
     </a>
     {% endif %}{% endfor %}
