@@ -71,6 +71,21 @@
                 transform: rotate(-45deg) translate(5px, -5px);
             }
         }
+        html, body {
+            overflow: hidden;
+        }
+
+        main {
+            overflow-y: scroll;
+            height: 100vh;
+            scroll-snap-type: y mandatory;
+        }
+
+        section {
+            scroll-snap-align: start;
+            min-height: 100vh;
+            padding: 60px 0;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </head>

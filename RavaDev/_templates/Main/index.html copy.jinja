@@ -1,440 +1,1203 @@
-{% extends "base.html" %}
-{% load static %}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RavaDev - Technologia bliżej ludzi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-darker: #050505;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --text-light: #ffffff;
+            --text-muted: #b0b0b0;
+            --primary: #00ffd5;
+            --primary-glow: 0 0 20px rgba(0, 255, 213, 0.3);
+            --secondary: #ff00ff;
+            --secondary-glow: 0 0 20px rgba(255, 0, 255, 0.3);
+            --accent-gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+            --card-border: rgba(0, 255, 213, 0.1);
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --radius: 16px;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
 
-{% block content %}
-<!-- Hero Section -->
-<section class="hero">
-  <div class="hero-content glass">
-    <h1 class="glitch" data-text="RavaDev">RavaDev</h1>
-    <p class="hero-subtitle">Technologia bliżej ludzi</p>
-    <p class="hero-description">
-      Profesjonalny outsourcing IT, tworzenie oprogramowania oraz kompleksowe wsparcie technologiczne dla Twojej firmy.
-    </p>
-    <div class="hero-buttons">
-      <a href="/contact" class="btn btn-primary">
-        <span class="btn-glow"></span>
-        <span class="btn-text">Bezpłatna wycena</span>
-      </a>
-      <a href="/services" class="btn btn-outline">
-        <span class="btn-text">Poznaj usługi</span>
-      </a>
-    </div>
-    <div class="hero-features">
-      <span>Bezpłatna wycena</span>
-      <span>Wdrożenia lokalne i chmurowe</span>
-      <span>Wsparcie 24/7</span>
-    </div>
-  </div>
-  
-</section>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-<section id="cta" class="cta-section">
-  <div class="cta-slider">
-    {% for img in cta_images %}
-      <div class="cta-slide {% if forloop.first %}active{% endif %}">
-        <img src="_media/{{ img }}" alt="Slajd {{ forloop.counter }}">
-      </div>
-    {% endfor %}
-    <!-- Strzałki -->
-    <button class="cta-prev">&#10094;</button>
-    <button class="cta-next">&#10095;</button>
-    <!-- Kropki -->
-    <div class="cta-dots">
-      {% for img in cta_images %}
-        <span class="cta-dot {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}"></span>
-      {% endfor %}
-    </div>
-  </div>
-</section>
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 213, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 0, 255, 0.05) 0%, transparent 20%);
+        }
 
-<section id="uslugi" class="services-section">
-  <h2>Usługi</h2>
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-{% for field in fields %}
-<div class="container glass widget-container" style="margin-bottom: 2rem;">
-    <h2>{{ field.name }}</h2>
-{% for service in services %}{% if service.field == field %}
-    <!-- Karta usługi -->
-    <a href="{% url 'Services:service_detail' service.id %}">
-        <div class="container glass widget-container">
+        /* Header Styles */
+        header {
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: var(--transition);
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        header.scrolled {
+            padding: 15px 0;
+            box-shadow: var(--shadow);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gradient);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-button {
+            background: var(--accent-gradient);
+            color: var(--bg-dark);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--primary-glow);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--primary-glow), 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 100px 0 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 255, 213, 0.1) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 1;
+            text-align: center;
+            margin: 0 auto;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius);
+            border: 1px solid var(--glass-border);
+            padding: 4rem 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .glitch {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--text-light);
+            text-shadow: var(--primary-glow);
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            clip: rect(0, 0, 0, 0);
+        }
+
+        .glitch::before {
+            left: -2px;
+            text-shadow: 2px 0 var(--primary);
+            animation: glitch-1 2s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: 2px;
+            text-shadow: -2px 0 var(--secondary);
+            animation: glitch-2 3s infinite linear alternate-reverse;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin: 1rem 0;
+        }
+
+        .hero-description {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            position: relative;
+            padding: 1rem 2rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--bg-dark);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .btn-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            filter: blur(20px);
+            opacity: 0.5;
+            transition: var(--transition);
+        }
+
+        .btn:hover .btn-glow {
+            opacity: 0.8;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--primary-glow);
+        }
+
+        .hero-features {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-features span {
+            padding: 0.5rem 1rem;
+            background: var(--bg-card);
+            border-radius: 50px;
+            border: 1px solid var(--card-border);
+        }
+
+        /* CTA Slider Section */
+        .cta-section {
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-slider {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .cta-slide {
+            display: none;
+            position: relative;
+        }
+
+        .cta-slide.active {
+            display: block;
+        }
+
+        .cta-slide img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .cta-prev, .cta-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--glass-bg);
+            color: var(--text-light);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .cta-prev:hover, .cta-next:hover {
+            background: var(--primary);
+            color: var(--bg-dark);
+        }
+
+        .cta-prev {
+            left: 20px;
+        }
+
+        .cta-next {
+            right: 20px;
+        }
+
+        .cta-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .cta-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .cta-dot.active {
+            background: var(--primary);
+        }
+
+        /* Services Section */
+        .services-section {
+            padding: 100px 0;
+            background-color: var(--bg-darker);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .section-title p {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .widget-container {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 30px;
+            transition: var(--transition);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .widget-container:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow), var(--primary-glow);
+        }
+
+        .widget-container h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .widget-container h4 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--text-light);
+        }
+
+        .content-split {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .image-container {
+            flex: 0 0 30%;
+        }
+
+        .image-container img {
+            width: 100%;
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+
+        .image-container img:hover {
+            transform: scale(1.05);
+        }
+
+        .widget-container .container {
+            flex: 1;
+        }
+
+        .widget-container h6 {
+            color: var(--primary);
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .widget-container p {
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .widget-container a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .widget-container a:hover {
+            color: var(--secondary);
+        }
+
+        /* Portfolio Section */
+        .portfolio-section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .portfolio-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 70%, rgba(255, 0, 255, 0.05) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding: 100px 0;
+            background: var(--bg-darker);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-gradient);
+            opacity: 0.05;
+            z-index: -1;
+        }
+
+        .contact-form-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius);
+            padding: 40px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: var(--radius);
+            background: var(--bg-card);
+            border: 1px solid var(--card-border);
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: var(--primary-glow);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .error-list {
+            margin-top: 5px;
+        }
+
+        .error {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+        }
+
+        .submit-btn {
+            background: var(--accent-gradient);
+            color: var(--bg-dark);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--primary-glow);
+            font-size: 1rem;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--primary-glow), 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-darker);
+            padding: 70px 0 30px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--accent-gradient);
+            border-radius: 3px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-light);
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--accent-gradient);
+            color: var(--bg-dark);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes glitch-1 {
+            0% { clip: rect(20px, 9999px, 15px, 0); }
+            100% { clip: rect(25px, 9999px, 99px, 0); }
+        }
+
+        @keyframes glitch-2 {
+            0% { clip: rect(80px, 9999px, 5px, 0); }
+            100% { clip: rect(10px, 9999px, 99px, 0); }
+        }
+
+        .floating {
+            animation: float 5s ease-in-out infinite;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
             
-            <!-- Górna część: dane elementu -->
-            <h4>{{ service.name }}</h4>
-
-            <!-- Dolna część: podział zawartości -->
-            <div class="content-split" style="display: flex; justify-content: space-between; width: 80%;">
-                
-                <!-- Lewa kolumna: zdjęcie -->
-                <div class="image-container" style="width: 100%;">
-                    <img src="{{ service.icon.url }}" 
-                         alt="Ikona {{ service.name }}" 
-                         style="max-width: 100%; height: auto; border-radius: 4px;" class="mini">
-                </div>
-
-                <!-- Prawa kolumna: informacje -->
-                <div class="container" style="width: 100%;">
-                    <h6>{{ service.field.name }}</h6>
-                    <br>
-                    <p>Cena: <strong>{{ service.price }}</strong></p>
-                    <p>Czas realizacji: <strong>{{ service.duration }}</strong></p>
-                    <p>{{ service.description|truncatechars:256 }}</p>
-                </div>
-                
-            </div>
-        </div>
-    </a>
-{% endif %}{% endfor %}
-</div>
-{% endfor %}
-
-</section>
-
-<section id="realizacje" class="portfolio-section">
-  <h2>Realizacje</h2>
-{% for project in projects %}
-    <!-- Karta projektu -->
-    <a href="{% url 'Projects:project_detail' project.id %}">
-        <div class="container glass widget-container">
+            .content-split {
+                flex-direction: column;
+            }
             
-            <!-- Górna część: dane elementu -->
-            <h4>{{ project.title }}</h4>
+            .image-container {
+                flex: 0 0 100%;
+            }
+        }
 
-            <!-- Dolna część: podział zawartości -->
-            <div class="content-split" style="display: flex; justify-content: space-between; width: 80%;">
-                
-                <!-- Lewa kolumna: zdjęcie -->
-                <div class="image-container" style="width: 100%;">
-                    <img src="{{ project.main_image.url }}" 
-                         alt="Zdjęcie {{ project.title }}" 
-                         style="max-width: 100%; height: auto; border-radius: 4px;" class="mini">
-                </div>
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+            
+            .hero {
+                text-align: center;
+                padding: 120px 0 50px;
+            }
+            
+            .hero-content {
+                max-width: 100%;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .hero-features {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
 
-                <!-- Prawa kolumna: informacje -->
-                <div class="container" style="width: 100%;">
-                    <h6>{{ project.client }}</h6>
-                    <br>
-                    <p>Kategoria: <strong>{{ project.category }}</strong></p>
-                    <p>Data realizacji: <strong>{{ project.completion_date|date:"d.m.Y" }}</strong></p>
-                    <p>{{ project.description|truncatechars:256 }}</p>
-                    <a href="{% url 'Projects:project_detail' project.id %}">Zobacz projekt</a>
-                </div>
-                
-            </div>
-        </div>
-    </a>
-{% endfor %}
-</section>
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .glitch {
+                font-size: 2.5rem;
+            }
+            
+            .cta-button, .outline-button {
+                width: 100%;
+                max-width: 250px;
+            }
+            
+            .contact-form-container {
+                padding: 20px;
+            }
+        }
 
-
-<section id="kontakt" class="contact-section">
-  <h2>Kontakt</h2>
-  
-<div class="contact-form-container">
-    <form method="post" novalidate>
-        {% csrf_token %}
-        
-        <div class="form-group">
-            <label for="{{ form.sender.id_for_label }}">{{ form.sender.label }}:</label>
-            {{ form.sender }}
-            {% if form.sender.errors %}
-            <div class="error-list">
-                {% for error in form.sender.errors %}
-                <span class="error">{{ error }}</span>
-                {% endfor %}
-            </div>
-            {% endif %}
-        </div>
-
-        <div class="form-group">
-            <label for="{{ form.email.id_for_label }}">{{ form.email.label }}:</label>
-            {{ form.email }}
-            {% if form.email.errors %}
-            <div class="error-list">
-                {% for error in form.email.errors %}
-                <span class="error">{{ error }}</span>
-                {% endfor %}
-            </div>
-            {% endif %}
-        </div>
-
-        <div class="form-group">
-            <label for="{{ form.phoneCode.id_for_label }}">Kod kierunkowy:</label>
-            {{ form.phoneCode }}
-            {% if form.phoneCode.errors %}
-            <div class="error-list">
-                {% for error in form.phoneCode.errors %}
-                <span class="error">{{ error }}</span>
-                {% endfor %}
-            </div>
-            {% endif %}
-        </div>
-
-        <div class="form-group">
-            <label for="{{ form.phoneNumber.id_for_label }}">Numer telefonu:</label>
-            {{ form.phoneNumber }}
-            {% if form.phoneNumber.errors %}
-            <div class="error-list">
-                {% for error in form.phoneNumber.errors %}
-                <span class="error">{{ error }}</span>
-                {% endfor %}
-            </div>
-            {% endif %}
-        </div>
-
-        <div class="form-group">
-            <label for="{{ form.content.id_for_label }}">{{ form.content.label }}:</label>
-            {{ form.content }}
-            {% if form.content.errors %}
-            <div class="error-list">
-                {% for error in form.content.errors %}
-                <span class="error">{{ error }}</span>
-                {% endfor %}
-            </div>
-            {% endif %}
-        </div>
-
-        <button type="submit" class="submit-btn">Wyślij wiadomość</button>
-    </form>
-</div>
-
-
-</section>
-
-
-</section>
-
-<style>
-:root {
-  --bg-dark: #0a0a0a;
-  --bg-darker: #050505;
-  --bg-card: rgba(255, 255, 255, 0.03);
-  --text-light: #ffffff;
-  --text-muted: #b0b0b0;
-  --primary: #00ffd5;
-  --primary-glow: 0 0 20px rgba(0, 255, 213, 0.3);
-  --secondary: #ff00ff;
-  --secondary-glow: 0 0 20px rgba(255, 0, 255, 0.3);
-  --accent-gradient: linear-gradient(135deg, var(--primary), var(--secondary));
-  --card-border: rgba(0, 255, 213, 0.1);
-  --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  --radius: 16px;
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
-}
-
-.hero {
-  min-height: 80vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  background: var(--bg-darker);
-}
-
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--accent-gradient);
-  opacity: 0.1;
-  pointer-events: none;
-}
-
-.hero-content {
-  text-align: center;
-  padding: 4rem 2rem;
-  max-width: 1200px;
-  width: 100%;
-  position: relative;
-  z-index: 1;
-}
-
-.glitch {
-  font-size: 4rem;
-  font-weight: 700;
-  color: var(--text-light);
-  text-shadow: var(--primary-glow);
-  position: relative;
-}
-
-.glitch::before,
-.glitch::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  clip: rect(0, 0, 0, 0);
-}
-
-.glitch::before {
-  left: -2px;
-  text-shadow: 2px 0 var(--primary);
-  animation: glitch-1 2s infinite linear alternate-reverse;
-}
-
-.glitch::after {
-  left: 2px;
-  text-shadow: -2px 0 var(--secondary);
-  animation: glitch-2 3s infinite linear alternate-reverse;
-}
-
-.hero-subtitle {
-  font-size: 1.5rem;
-  color: var(--primary);
-  margin: 1rem 0;
-}
-
-.hero-description {
-  color: var(--text-muted);
-  font-size: 1.1rem;
-  max-width: 600px;
-  margin: 0 auto 2rem;
-}
-
-.hero-buttons {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  margin-bottom: 2rem;
-}
-
-.btn {
-  position: relative;
-  padding: 1rem 2rem;
-  border-radius: var(--radius);
-  font-weight: 600;
-  text-decoration: none;
-  transition: var(--transition);
-  overflow: hidden;
-}
-
-.btn-primary {
-  background: var(--primary);
-  color: var(--bg-dark);
-}
-
-.btn-outline {
-  border: 2px solid var(--primary);
-  color: var(--primary);
-}
-
-.btn-glow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--primary);
-  filter: blur(20px);
-  opacity: 0.5;
-  transition: var(--transition);
-}
-
-.btn:hover .btn-glow {
-  opacity: 0.8;
-}
-
-.hero-features {
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
-  color: var(--text-muted);
-  font-size: 0.9rem;
-}
-
-.services-preview {
-  padding: 6rem 2rem;
-  background: var(--bg-dark);
-}
-
-.section-title {
-  text-align: center;
-  color: var(--text-light);
-  font-size: 2.5rem;
-  margin-bottom: 3rem;
-}
-
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.service-card {
-  padding: 2rem;
-  border-radius: var(--radius);
-  background: var(--bg-card);
-  border: 1px solid var(--card-border);
-  transition: var(--transition);
-}
-
-.service-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--primary-glow);
-}
-
-.service-icon {
-  font-size: 2rem;
-  color: var(--primary);
-  margin-bottom: 1rem;
-}
-
-.card-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--primary);
-  text-decoration: none;
-  margin-top: 1rem;
-  transition: var(--transition);
-}
-
-.card-link:hover {
-  gap: 1rem;
-}
-
-@keyframes glitch-1 {
-  0% { clip: rect(20px, 9999px, 15px, 0); }
-  100% { clip: rect(25px, 9999px, 99px, 0); }
-}
-
-@keyframes glitch-2 {
-  0% { clip: rect(80px, 9999px, 5px, 0); }
-  100% { clip: rect(10px, 9999px, 99px, 0); }
-}
-</style>
-{% endblock %}
-{% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  // Parallax effect for hero section
-  const hero = document.querySelector('.hero');
-  window.addEventListener('scroll', () => {
-    const scroll = window.pageYOffset;
-    hero.style.backgroundPositionY = `${scroll * 0.5}px`;
-  });
-
-  // Intersection Observer for fade-in animations
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('fade-in');
+      html, body {
+            overflow: hidden;
       }
-    });
-  }, { threshold: 0.1 });
 
-  document.querySelectorAll('.service-card').forEach(card => {
-    observer.observe(card);
-  });
-});
-</script>
-{% endblock %}
+      main {
+            overflow-y: scroll;
+            height: 100vh;
+            scroll-snap-type: y mandatory;
+      }
+
+      section {
+            scroll-snap-align: start;
+            min-height: 100vh;
+            padding: 60px 0;
+      }
+
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-code"></i>
+                    RavaDev
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#uslugi">Usługi</a></li>
+                    <li><a href="#realizacje">Realizacje</a></li>
+                    <li><a href="#kontakt">Kontakt</a></li>
+                </ul>
+                <button class="cta-button">Bezpłatna wycena</button>
+                <div class="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="glitch" data-text="RavaDev">RavaDev</h1>
+                <p class="hero-subtitle">Technologia bliżej ludzi</p>
+                <p class="hero-description">
+                    Profesjonalny outsourcing IT, tworzenie oprogramowania oraz kompleksowe wsparcie technologiczne dla Twojej firmy.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary">
+                        <span class="btn-glow"></span>
+                        <span class="btn-text">Bezpłatna wycena</span>
+                    </button>
+                    <button class="btn btn-outline">
+                        <span class="btn-text">Poznaj usługi</span>
+                    </button>
+                </div>
+                <div class="hero-features">
+                    <span>Bezpłatna wycena</span>
+                    <span>Wdrożenia lokalne i chmurowe</span>
+                    <span>Wsparcie 24/7</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="cta" class="cta-section">
+        <div class="container">
+            <div class="cta-slider">
+                <!-- Slider będzie wypełniony dynamicznie przez JS -->
+                <div class="cta-slide active">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Nowoczesne rozwiązania IT">
+                </div>
+                <div class="cta-slide">
+                    <img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1420&q=80" alt="Tworzenie oprogramowania">
+                </div>
+                <div class="cta-slide">
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Wsparcie technologiczne">
+                </div>
+                <!-- Strzałki -->
+                <button class="cta-prev">&#10094;</button>
+                <button class="cta-next">&#10095;</button>
+                <!-- Kropki -->
+                <div class="cta-dots">
+                    <span class="cta-dot active" data-slide="0"></span>
+                    <span class="cta-dot" data-slide="1"></span>
+                    <span class="cta-dot" data-slide="2"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="uslugi" class="services-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Usługi</h2>
+                <p>Kompleksowe rozwiązania IT dostosowane do Twoich potrzeb</p>
+            </div>
+
+            <!-- Przykładowe usługi - w rzeczywistości będą wypełnione przez Django -->
+            <div class="widget-container">
+                <h2>Tworzenie Oprogramowania</h2>
+                
+                <div class="widget-container">
+                    <h4>Aplikacje Webowe</h4>
+                    <div class="content-split">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Aplikacje Webowe">
+                        </div>
+                        <div class="container">
+                            <h6>Tworzenie Oprogramowania</h6>
+                            <br>
+                            <p>Cena: <strong>od 5000 PLN</strong></p>
+                            <p>Czas realizacji: <strong>4-8 tygodni</strong></p>
+                            <p>Tworzymy nowoczesne aplikacje webowe z wykorzystaniem najnowszych technologii. Nasze rozwiązania są responsywne, bezpieczne i zoptymalizowane pod kątem wydajności.</p>
+                            <a href="#">Zobacz szczegóły</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="widget-container">
+                    <h4>Aplikacje Mobilne</h4>
+                    <div class="content-split">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Aplikacje Mobilne">
+                        </div>
+                        <div class="container">
+                            <h6>Tworzenie Oprogramowania</h6>
+                            <br>
+                            <p>Cena: <strong>od 8000 PLN</strong></p>
+                            <p>Czas realizacji: <strong>6-12 tygodni</strong></p>
+                            <p>Tworzymy natywne i hybrydowe aplikacje mobilne dla systemów iOS i Android. Zapewniamy intuicyjny interfejs użytkownika i pełną funkcjonalność.</p>
+                            <a href="#">Zobacz szczegóły</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="widget-container">
+                <h2>Outsourcing IT</h2>
+                
+                <div class="widget-container">
+                    <h4>Wsparcie Techniczne</h4>
+                    <div class="content-split">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Wsparcie Techniczne">
+                        </div>
+                        <div class="container">
+                            <h6>Outsourcing IT</h6>
+                            <br>
+                            <p>Cena: <strong>od 1500 PLN/miesiąc</strong></p>
+                            <p>Czas realizacji: <strong>natychmiastowy</strong></p>
+                            <p>Zapewniamy kompleksowe wsparcie techniczne dla firm. Nasz zespół ekspertów jest dostępny 24/7, aby rozwiązać każdy problem techniczny.</p>
+                            <a href="#">Zobacz szczegóły</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="realizacje" class="portfolio-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Realizacje</h2>
+                <p>Zobacz nasze najnowsze projekty</p>
+            </div>
+
+            <!-- Przykładowe projekty - w rzeczywistości będą wypełnione przez Django -->
+            <div class="widget-container">
+                <h4>System Zarządzania Zleceniami</h4>
+                <div class="content-split">
+                    <div class="image-container">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="System Zarządzania Zleceniami">
+                    </div>
+                    <div class="container">
+                        <h6>Firma Budowlana XYZ</h6>
+                        <br>
+                        <p>Kategoria: <strong>Aplikacje Webowe</strong></p>
+                        <p>Data realizacji: <strong>15.03.2023</strong></p>
+                        <p>Opracowaliśmy kompleksowy system do zarządzania zleceniami dla firmy budowlanej. System umożliwia śledzenie postępów prac, zarządzanie zasobami i generowanie raportów.</p>
+                        <a href="#">Zobacz projekt</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="widget-container">
+                <h4>Aplikacja Mobilna dla Restauracji</h4>
+                <div class="content-split">
+                    <div class="image-container">
+                        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Aplikacja Mobilna dla Restauracji">
+                    </div>
+                    <div class="container">
+                        <h6>Restauracja Smakosz</h6>
+                        <br>
+                        <p>Kategoria: <strong>Aplikacje Mobilne</strong></p>
+                        <p>Data realizacji: <strong>22.06.2023</strong></p>
+                        <p>Stworzyliśmy aplikację mobilną umożliwiającą klientom restauracji przeglądanie menu, składanie zamówień i dokonywanie płatności. Aplikacja zwiększyła liczbę zamówień online o 40%.</p>
+                        <a href="#">Zobacz projekt</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="kontakt" class="contact-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Kontakt</h2>
+                <p>Skontaktuj się z nami, aby omówić swój projekt</p>
+            </div>
+            
+            <div class="contact-form-container">
+                <form method="post" novalidate>
+                    <div class="form-group">
+                        <label for="sender">Imię i nazwisko:</label>
+                        <input type="text" id="sender" name="sender" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Adres email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phoneCode">Kod kierunkowy:</label>
+                        <select id="phoneCode" name="phoneCode">
+                            <option value="+48">+48 Polska</option>
+                            <option value="+49">+49 Niemcy</option>
+                            <option value="+44">+44 Wielka Brytania</option>
+                            <option value="+1">+1 USA/Canada</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phoneNumber">Numer telefonu:</label>
+                        <input type="tel" id="phoneNumber" name="phoneNumber">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="content">Wiadomość:</label>
+                        <textarea id="content" name="content" required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Wyślij wiadomość</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>RavaDev</h3>
+                    <p>Nowoczesne rozwiązania IT dla nowoczesnych firm. Transformujemy sposób, w jaki pracujesz.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Usługi</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Tworzenie oprogramowania</a></li>
+                        <li><a href="#">Outsourcing IT</a></li>
+                        <li><a href="#">Wsparcie techniczne</a></li>
+                        <li><a href="#">Konsultacje IT</a></li>
+                        <li><a href="#">Wszystkie usługi</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Firma</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">O nas</a></li>
+                        <li><a href="#">Kariera</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Partnerzy</a></li>
+                        <li><a href="#">Kontakt</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Wsparcie</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Centrum pomocy</a></li>
+                        <li><a href="#">Dokumentacja</a></li>
+                        <li><a href="#">Status systemu</a></li>
+                        <li><a href="#">Szkolenia</a></li>
+                        <li><a href="#">Polityka prywatności</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 RavaDev. Wszelkie prawa zastrzeżone.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll header effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // CTA Slider functionality
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.cta-slide');
+        const dots = document.querySelectorAll('.cta-dot');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            currentSlide = (n + totalSlides) % totalSlides;
+            
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        document.querySelector('.cta-next').addEventListener('click', () => {
+            showSlide(currentSlide + 1);
+        });
+
+        document.querySelector('.cta-prev').addEventListener('click', () => {
+            showSlide(currentSlide - 1);
+        });
+
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const slideIndex = parseInt(dot.getAttribute('data-slide'));
+                showSlide(slideIndex);
+            });
+        });
+
+        // Auto-slide every 5 seconds
+        setInterval(() => {
+            showSlide(currentSlide + 1);
+        }, 5000);
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements to animate
+        document.querySelectorAll('.widget-container').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Add animation class to elements when they come into view
+        const animateOnScroll = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // Apply initial styles and observe
+        document.querySelectorAll('.widget-container').forEach(el => {
+            el.style.opacity = "0";
+            el.style.transform = "translateY(20px)";
+            el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+            animateOnScroll.observe(el);
+        });
+
+        // Button click handlers
+        document.querySelector('.btn-primary').addEventListener('click', () => {
+            document.querySelector('#kontakt').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.querySelector('.btn-outline').addEventListener('click', () => {
+            document.querySelector('#uslugi').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.querySelector('.cta-button').addEventListener('click', () => {
+            document.querySelector('#kontakt').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
